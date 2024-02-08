@@ -15,7 +15,7 @@ public class playerHandler : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         move();
-        Debug.Log(transform.forward);
+        Debug.Log("testing");
     }
 
 
