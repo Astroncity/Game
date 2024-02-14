@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Assets\scripts\playerHandler.cs" />
     <Compile Include="Assets\scripts\CameraController.cs" />
+    <Compile Include="Assets\scripts\BuildMode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

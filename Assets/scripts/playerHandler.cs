@@ -6,7 +6,9 @@ public class playerHandler : MonoBehaviour {
     // Start is called before the first frame update
     float speed;
     public GameObject cam;
-    public GameObject tracker;
+
+    public GameObject buildCam;
+    public bool canMove = true;
     void Start() {
         speed = 25f;
         Cursor.lockState = CursorLockMode.Locked;
@@ -14,8 +16,7 @@ public class playerHandler : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        move();
-        Debug.Log("testing");
+        if(canMove) { move(); }
     }
 
 
@@ -31,6 +32,10 @@ public class playerHandler : MonoBehaviour {
         }
         if(Input.GetKey(KeyCode.D)) {
             transform.Translate(transform.right * speed * Time.deltaTime, Space.World);
+        }
+        if(Input.GetKey(KeyCode.B)) {
+            cam.SetActive(false);
+            buildCam.SetActive(true);
         }
 
 
