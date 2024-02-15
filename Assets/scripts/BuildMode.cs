@@ -12,6 +12,8 @@ public class BuildMode : MonoBehaviour
 
     private GameObject[] prefabs;
 
+    private GameObject selectedObeject = null;
+
     void Start()
     {
         player.GetComponent<playerHandler>().canMove = false;
@@ -51,6 +53,7 @@ public class BuildMode : MonoBehaviour
     public void initBuild() {
         mainCam.enabled = false;
         gameObject.SetActive(gameObject);
+        
     }
 
     public void loadUI() {
