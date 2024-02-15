@@ -267,10 +267,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCam: {fileID: 963194227}
-  buildCam: {fileID: 0}
+  buildCam: {fileID: 409251908}
   speed: 15
   player: {fileID: 2066043281}
-  holographic: {fileID: 0}
+  marker: {fileID: 197083425}
+  holographicGreen: {fileID: 2100000, guid: 3d2332cfe6e89aa45b12d878cf6c3017, type: 2}
+  holographicRed: {fileID: 2100000, guid: a8812c3191b6e794396a922894f1022c, type: 2}
+  sens: 250
+  tileSize: 1
 --- !u!81 &409251907
 AudioListener:
   m_ObjectHideFlags: 0

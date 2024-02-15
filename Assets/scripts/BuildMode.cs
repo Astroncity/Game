@@ -16,33 +16,52 @@ public class BuildMode : MonoBehaviour
     private GameObject[] prefabs;
 
     private GameObject selectedObejectPrefab;
+
     private GameObject liveSelected;
+    private Renderer liveRend;
 
-    private Vector3 mouse;
 
-    public Material holographic;
+    public Material holographicGreen;
+    public Material holographicRed;
+
+    float plateY;
+    public float sens = 25f;
+    public int tileSize = 1;
+
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.None;
+
+
         player.GetComponent<playerHandler>().canMove = false;
         buildCam = GetComponent<Camera>();
-        
+        plateY = marker.GetComponent<BaseMarker>().plate.transform.position.y;
+
         prefabs = Resources.LoadAll<GameObject>("prefabs");
         Debug.Log(prefabs[0].name);
         selectedObejectPrefab = prefabs[0];
-        liveSelected = Instantiate(selectedObejectPrefab, mainCam.ScreenToWorldPoint(Input.mousePosition), selectedObejectPrefab.transform.rotation);
-        liveSelected.GetComponent<Renderer>().material = holographic;
+        liveSelected = Instantiate(selectedObejectPrefab, Vector3.zero, selectedObejectPrefab.transform.rotation);
+        liveSelected.GetComponent<Renderer>().material = holographicGreen;
 
+        liveRend = liveSelected.GetComponent<Renderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float xr = Input.GetAxis("Mouse X") * Time.deltaTime * mainCam.GetComponent<CameraController>().Sens;
-        float yr = -Input.GetAxis("Mouse Y") * Time.deltaTime * mainCam.GetComponent<CameraController>().Sens;
+        if(Input.GetMouseButton(1)) {
+            float xr = Input.GetAxis("Mouse X") * Time.deltaTime * sens;
+            float yr = -Input.GetAxis("Mouse Y") * Time.deltaTime * sens;
 
-        transform.Rotate(new Vector3(yr, xr, 0));
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
+            transform.Rotate(new Vector3(yr, xr, 0));
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        
 
         move();
 
@@ -67,18 +86,49 @@ public class BuildMode : MonoBehaviour
         }
     }
 
-    public void initBuild() {
-        mainCam.enabled = false;
-        gameObject.SetActive(gameObject);
-        
+    public void displayHolo() {
+        Vector3 mouse = Input.mousePosition;
+        float distance = getDistanceFromPlate();
+        if(distance == -1) { return; }
+        mouse.z = distance;
+        liveSelected.transform.position = buildCam.ScreenToWorldPoint(mouse);
+        Debug.Log(buildCam.ScreenToWorldPoint(Input.mousePosition));
+        liveSelected.transform.position = new Vector3(liveSelected.transform.position.x, plateY + 1f, liveSelected.transform.position.z);
+        Vector3 temp = liveSelected.transform.position;
+        temp.x = RoundTo(temp.x, (float)tileSize); temp.z = RoundTo(temp.z, (float)tileSize);
+        liveSelected.transform.position = temp;
+
+        //check collision
+        bool collided = liveSelected.GetComponent<BaseMachine>().colliding;
+        if(collided) {
+             liveRend.material = holographicRed;
+        }
+        else {
+            liveRend.material = holographicGreen;
+        }
+
+
+        if(Input.GetMouseButtonDown(0) && !collided) {
+            Instantiate(selectedObejectPrefab, liveSelected.transform.position, liveSelected.transform.rotation);
+        }
     }
 
-    public void displayHolo() {
-        liveSelected.transform.position = buildCam.ScreenToWorldPoint(Input.mousePosition);
-        liveSelected.transform.position.Set(liveSelected.transform.position.x, marker.GetComponent<BaseMarker>().plate.transform.position.y + 0.1);
+    public static float RoundTo(float value, float multipleOf) {
+        return Mathf.Round(value / multipleOf) * multipleOf;
     }
 
     public void loadUI() {
 
+    }
+
+    public float getDistanceFromPlate() {
+        RaycastHit hit;
+        Ray ray = buildCam.ScreenPointToRay(Input.mousePosition);
+        //Debug.DrawRay(ray.origin, ray.direction, Color.red, 200, false);
+        bool DidHit = Physics.Raycast(ray, out hit, 200f);
+        if(!DidHit) { return -1; }
+        else {
+            return hit.distance;
+        }
     }
 }
