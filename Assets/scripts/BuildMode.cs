@@ -7,19 +7,32 @@ public class BuildMode : MonoBehaviour
 {
     // Start is called before the first frame update
     public Camera mainCam;
+    public Camera buildCam;
+
     public float speed;
     public GameObject player;
+    public GameObject marker;
 
     private GameObject[] prefabs;
 
-    private GameObject selectedObeject = null;
+    private GameObject selectedObejectPrefab;
+    private GameObject liveSelected;
+
+    private Vector3 mouse;
+
+    public Material holographic;
 
     void Start()
     {
         player.GetComponent<playerHandler>().canMove = false;
+        buildCam = GetComponent<Camera>();
         
         prefabs = Resources.LoadAll<GameObject>("prefabs");
         Debug.Log(prefabs[0].name);
+        selectedObejectPrefab = prefabs[0];
+        liveSelected = Instantiate(selectedObejectPrefab, mainCam.ScreenToWorldPoint(Input.mousePosition), selectedObejectPrefab.transform.rotation);
+        liveSelected.GetComponent<Renderer>().material = holographic;
+
     }
 
     // Update is called once per frame
@@ -32,6 +45,10 @@ public class BuildMode : MonoBehaviour
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
 
         move();
+
+        if(liveSelected != null) {
+            displayHolo();
+        }
 
     }
 
@@ -54,6 +71,11 @@ public class BuildMode : MonoBehaviour
         mainCam.enabled = false;
         gameObject.SetActive(gameObject);
         
+    }
+
+    public void displayHolo() {
+        liveSelected.transform.position = buildCam.ScreenToWorldPoint(Input.mousePosition);
+        liveSelected.transform.position.Set(liveSelected.transform.position.x, marker.GetComponent<BaseMarker>().plate.transform.position.y + 0.1);
     }
 
     public void loadUI() {

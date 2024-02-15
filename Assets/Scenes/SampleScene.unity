@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 197083428}
   - component: {fileID: 197083427}
   - component: {fileID: 197083426}
+  - component: {fileID: 197083430}
   m_Layer: 0
   m_Name: tempBaseMarker
   m_TagString: buildOrigin
@@ -221,6 +222,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &197083430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197083425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d52a3c131a75c8d49aff971d776be2c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plate: {fileID: 825771679}
 --- !u!1 &409251905
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,8 +267,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCam: {fileID: 963194227}
+  buildCam: {fileID: 0}
   speed: 15
   player: {fileID: 2066043281}
+  holographic: {fileID: 0}
 --- !u!81 &409251907
 AudioListener:
   m_ObjectHideFlags: 0
@@ -428,7 +444,7 @@ GameObject:
   - component: {fileID: 825771681}
   - component: {fileID: 825771680}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
