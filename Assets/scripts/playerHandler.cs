@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class playerHandler : MonoBehaviour {
     // Start is called before the first frame update
@@ -9,9 +10,11 @@ public class playerHandler : MonoBehaviour {
 
     public GameObject buildCam;
     public bool canMove = true;
+    private float sens;
     void Start() {
         speed = 25f;
         Cursor.lockState = CursorLockMode.Locked;
+        sens = cam.GetComponent<CameraController>().Sens;
     }
 
     // Update is called once per frame
@@ -38,14 +41,10 @@ public class playerHandler : MonoBehaviour {
             buildCam.SetActive(true);
         }
 
-
         //cam
-        float xr = Input.GetAxis("Mouse X") * Time.deltaTime * cam.GetComponent<CameraController>().Sens;
-        float yr = Input.GetAxis("Mouse Y") * Time.deltaTime * cam.GetComponent<CameraController>().Sens;
+        float xr = Input.GetAxis("Mouse X") * Time.deltaTime * sens;
 
         transform.Rotate(new Vector3(0, xr, 0));
-        cam.transform.Rotate(new Vector3(yr, xr, 0));
-        cam.transform.eulerAngles = new Vector3(cam.transform.eulerAngles.x, cam.transform.eulerAngles.y, 0);
 
     }
 }

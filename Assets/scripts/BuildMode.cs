@@ -28,6 +28,9 @@ public class BuildMode : MonoBehaviour
     public float sens = 25f;
     public int tileSize = 1;
 
+    private float rotationX = 0;
+    private float rotationY = 0;
+
 
     void Start()
     {
@@ -51,17 +54,19 @@ public class BuildMode : MonoBehaviour
     void Update()
     {
         if(Input.GetMouseButton(1)) {
+            Cursor.lockState = CursorLockMode.Locked;
             float xr = Input.GetAxis("Mouse X") * Time.deltaTime * sens;
             float yr = -Input.GetAxis("Mouse Y") * Time.deltaTime * sens;
+            rotationX += yr;
+            rotationY += xr;
 
-            transform.Rotate(new Vector3(yr, xr, 0));
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
-            Cursor.lockState = CursorLockMode.Locked;
+            transform.rotation = Quaternion.Euler(new Vector3(rotationX, rotationY, 0));
         }
         else {
             Cursor.lockState = CursorLockMode.None;
         }
-        
+
+
 
         move();
 
@@ -91,9 +96,10 @@ public class BuildMode : MonoBehaviour
         float distance = getDistanceFromPlate();
         if(distance == -1) { return; }
         mouse.z = distance;
+
         liveSelected.transform.position = buildCam.ScreenToWorldPoint(mouse);
-        Debug.Log(buildCam.ScreenToWorldPoint(Input.mousePosition));
         liveSelected.transform.position = new Vector3(liveSelected.transform.position.x, plateY + 1f, liveSelected.transform.position.z);
+
         Vector3 temp = liveSelected.transform.position;
         temp.x = RoundTo(temp.x, (float)tileSize); temp.z = RoundTo(temp.z, (float)tileSize);
         liveSelected.transform.position = temp;

@@ -27,17 +27,17 @@ public class CameraController : MonoBehaviour {
         transform.position = player.transform.position - dist;
 
         float xr = Input.GetAxis("Mouse X") * Time.deltaTime * Sens;
-        float yr = Input.GetAxis("Mouse Y") * Time.deltaTime * Sens;
+        float yr = -Input.GetAxis("Mouse Y") * Time.deltaTime * Sens;
         rotationX += yr;
         rotationY += xr;
 
         transform.rotation = Quaternion.Euler(new Vector3(rotationX, rotationY, 0));
 
         if(rotationX > maxAngle){
-            rotationX = maxAngle;
+            rotationX = Mathf.Lerp(rotationX, maxAngle, 0.1f / 2);
         }
         else if(rotationX < minAngle) {
-            rotationX = minAngle;
+            rotationX = Mathf.Lerp(rotationX, minAngle, 0.1f / 2);
         }
     }
 }
