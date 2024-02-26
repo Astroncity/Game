@@ -12,6 +12,7 @@ public class BuildMode : MonoBehaviour
     public float speed;
     public GameObject player;
     public GameObject marker;
+    public GameObject ui;
 
     private GameObject[] prefabs;
 
@@ -31,9 +32,12 @@ public class BuildMode : MonoBehaviour
     private float rotationX = 0;
     private float rotationY = 0;
 
+    public bool focused = true;
+
 
     void Start()
     {
+        ui.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
 
 
@@ -70,7 +74,7 @@ public class BuildMode : MonoBehaviour
 
         move();
 
-        if(liveSelected != null) {
+        if(liveSelected != null && focused) {
             displayHolo();
         }
 
