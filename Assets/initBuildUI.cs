@@ -12,16 +12,19 @@ public class initBuildUI : MonoBehaviour {
     void Start() {
         string[] thumbnailsPaths = Directory.GetFiles(Application.dataPath + "/Resources/MachineThumbnails");
 
-        string[] thumbnailsNames = new string[thumbnailsPaths.Length];
+        List<string> thumbnailsNames = new List<string>(); 
 
-        for(int i = 0; i < thumbnailsPaths.Length; i++) {
-            thumbnailsNames[i] = Path.GetFileNameWithoutExtension(thumbnailsPaths[i]);
-            thumbnailsNames[i] = thumbnailsNames[i].Substring(0, thumbnailsNames[i].Length - 5);
+        foreach(string path in thumbnailsPaths) {
+            if(Path.GetExtension(path) == ".meta") {
+                continue;
+            }
+            string str = Path.GetFileNameWithoutExtension(path);
+            thumbnailsNames.Add(str.Substring(0, str.Length - 5));
         }
 
-        for(int i = 0; i < thumbnailsNames.Length; i++) {
+        foreach(string name in thumbnailsNames) {
             GameObject ui = Instantiate(uiPrefab, marker.transform.position, uiPrefab.transform.rotation, canvas.transform);
-            ui.GetComponent<MachineUI>().mName = thumbnailsNames[i];
+            ui.GetComponent<MachineUI>().mName = name;
             marker.transform.Translate(new Vector3(420 / 3f, 0, 0));
         }
     }
