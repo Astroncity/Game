@@ -6,15 +6,10 @@ public class BaseMachine : MonoBehaviour
 {
     // Start is called before the first frame update
     public bool colliding = false;
-    void Start()
-    {
-        
-    }
+    protected MachineData data;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    protected void init() {
+        data = GetComponent<MachineData>();
     }
 
     private void OnTriggerEnter(Collider collision) {

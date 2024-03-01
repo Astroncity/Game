@@ -11,6 +11,8 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private Sprite thumbnailImage;
     private GameObject image;
 
+    private GameObject prefab;
+
     public GameObject imageContainer;
     public RectTransform form;
 
@@ -19,7 +21,7 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private float initY;
     private bool isHovering = false;
     private float targetY;
-    public float hoverOffset = 50f; 
+    public float hoverOffset = 50f;
 
     void Start() {
         player = GameObject.Find("BuildModeCam").GetComponent<BuildMode>();
@@ -32,7 +34,11 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
         targetY = initY;
 
-        ReadPriceFromJSON();
+        prefab = Resources.Load<GameObject>("prefabs/" + mName + ".prefab");
+        Debug.Log("prefabs/" + mName + ".prefab");
+        price = prefab.GetComponent<MachineData>().price;
+
+
     }
 
     void Update() {
@@ -53,34 +59,4 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         isHovering = false;
         player.focused = true;
     }
-
-    void ReadPriceFromJSON() {
-        string jsonFilePath = "MachineData/MachineData";
-        TextAsset jsonFile = Resources.Load<TextAsset>(jsonFilePath);
-
-        if(jsonFile != null) {
-            MachineData machineData = JsonUtility.FromJson<MachineData>(jsonFile.text);
-
-            if(machineData != null && machineData.Machines.ContainsKey(mName)) {
-                price = machineData.Machines[mName].price;
-                Debug.Log(mName + ": " + price); 
-            }
-            else {
-                Debug.LogWarning("Machine " + mName + " not found in JSON data.");
-            }
-        }
-        else {
-            Debug.LogError("JSON file not found at path: " + jsonFilePath);
-        }
-    }
-}
-
-[System.Serializable]
-public class MachineData {
-    public Dictionary<string, Machine> Machines;
-}
-
-[System.Serializable]
-public class Machine {
-    public int price;
 }
