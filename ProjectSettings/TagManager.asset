@@ -6,6 +6,7 @@ TagManager:
   tags:
   - buildOrigin
   - machine
+  - Item
   layers:
   - Default
   - TransparentFX

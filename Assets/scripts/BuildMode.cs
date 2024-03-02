@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class BuildMode : MonoBehaviour
 {
     // Start is called before the first frame update
-    public Camera mainCam;
+    public GameObject mainCam;
     public Camera buildCam;
 
     public float speed;
@@ -14,12 +14,12 @@ public class BuildMode : MonoBehaviour
     public GameObject marker;
     public GameObject ui;
 
-    private GameObject[] prefabs;
+    private GameObject prefab;
 
     private GameObject selectedObejectPrefab;
 
     private GameObject liveSelected;
-    private Renderer liveRend;
+    private Renderer[] liveRends;
 
 
     public Material holographicGreen;
@@ -34,24 +34,49 @@ public class BuildMode : MonoBehaviour
 
     public bool focused = true;
 
+    private Collider col;
+    private BaseMachine baseMachine;
+    private Vector2 offset;
+
 
     void Start()
     {
+
         ui.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
+        focused = true;
 
 
         player.GetComponent<playerHandler>().canMove = false;
         buildCam = GetComponent<Camera>();
         plateY = marker.GetComponent<BaseMarker>().plate.transform.position.y;
+        // add offset to include plate height
+        plateY += marker.GetComponent<BaseMarker>().plate.GetComponent<Collider>().bounds.extents.y;
 
-        prefabs = Resources.LoadAll<GameObject>("prefabs");
-        Debug.Log(prefabs[0].name);
-        selectedObejectPrefab = prefabs[0];
+
+    
+    }
+
+
+    public void select(GameObject prefab){
+        if(liveSelected != null) {
+            Destroy(liveSelected);
+        }
+        Debug.Log(prefab.name);
+        selectedObejectPrefab = prefab;
         liveSelected = Instantiate(selectedObejectPrefab, Vector3.zero, selectedObejectPrefab.transform.rotation);
-        liveSelected.GetComponent<Renderer>().material = holographicGreen;
 
-        liveRend = liveSelected.GetComponent<Renderer>();
+        Renderer liveRend; 
+
+        if(TryGetComponent<Renderer>(out liveRend)){
+            liveRends = new Renderer[1];
+            liveRends[0] = liveRend;
+        }
+        else {
+            liveRends = liveSelected.GetComponentsInChildren<Renderer>();
+        }
+        col = liveSelected.GetComponent<Collider>();
+        baseMachine = liveSelected.GetComponent<BaseMachine>();
     }
 
     // Update is called once per frame
@@ -59,8 +84,8 @@ public class BuildMode : MonoBehaviour
     {
         if(Input.GetMouseButton(1)) {
             Cursor.lockState = CursorLockMode.Locked;
-            float xr = Input.GetAxis("Mouse X") * Time.deltaTime * sens;
-            float yr = -Input.GetAxis("Mouse Y") * Time.deltaTime * sens;
+            float xr = Input.GetAxis("Mouse X") * sens;
+            float yr = -Input.GetAxis("Mouse Y") * sens;
             rotationX += yr;
             rotationY += xr;
 
@@ -68,6 +93,18 @@ public class BuildMode : MonoBehaviour
         }
         else {
             Cursor.lockState = CursorLockMode.None;
+        }
+
+        if(Input.GetKey(KeyCode.Escape)) {
+            mainCam.SetActive(true);
+            ui.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            gameObject.SetActive(false);
+            player.GetComponent<playerHandler>().canMove = true;
+
+            if(liveSelected != null) {
+                Destroy(liveSelected);
+            }
         }
 
 
@@ -102,19 +139,28 @@ public class BuildMode : MonoBehaviour
         mouse.z = distance;
 
         liveSelected.transform.position = buildCam.ScreenToWorldPoint(mouse);
-        liveSelected.transform.position = new Vector3(liveSelected.transform.position.x, plateY + 1f, liveSelected.transform.position.z);
+        float posy;
+        // set y position to plate y taking into account the height of the object with the collider and the width of the plate
+        posy = plateY;
+
+
+        liveSelected.transform.position = new Vector3(liveSelected.transform.position.x, posy, liveSelected.transform.position.z);
 
         Vector3 temp = liveSelected.transform.position;
-        temp.x = RoundTo(temp.x, (float)tileSize); temp.z = RoundTo(temp.z, (float)tileSize);
+        temp.x = RoundTo(temp.x, (float)tileSize) + selectedObejectPrefab.transform.position.x ; temp.z = RoundTo(temp.z, (float)tileSize) + selectedObejectPrefab.transform.position.z;
         liveSelected.transform.position = temp;
 
         //check collision
-        bool collided = liveSelected.GetComponent<BaseMachine>().colliding;
+        bool collided = baseMachine.colliding;
         if(collided) {
-             liveRend.material = holographicRed;
+            foreach(Renderer rend in liveRends) {
+                rend.material = holographicRed;
+            }
         }
-        else {
-            liveRend.material = holographicGreen;
+        else{
+            foreach(Renderer rend in liveRends) {
+                rend.material = holographicGreen;
+            }
         }
 
 

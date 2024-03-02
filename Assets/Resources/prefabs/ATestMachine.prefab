@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6453206865253143523}
   - component: {fileID: 843443344461875773}
   m_Layer: 0
-  m_Name: TestMachine
+  m_Name: ATestMachine
   m_TagString: machine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

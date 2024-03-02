@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour {
     //Rotation Sensitivity
     public float minAngle = -90f;
     public float maxAngle = 90f;
-    public float Sens = 50;
+    public float Sens = 0.05f;
 
     private float rotationX = 0;
     private float rotationY = 0;
@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour {
 
     void Start() {
         dist.x = transform.position.x - player.transform.position.x;
-        dist.y = transform.position.y - player.transform.position.y - 1.5f;
+        dist.y = transform.position.y - player.transform.position.y - 1.15f;
         dist.z = transform.position.z - player.transform.position.z;
     }
 
@@ -26,18 +26,18 @@ public class CameraController : MonoBehaviour {
     void Update() {
         transform.position = player.transform.position - dist;
 
-        float xr = Input.GetAxis("Mouse X") * Time.deltaTime * Sens;
-        float yr = -Input.GetAxis("Mouse Y") * Time.deltaTime * Sens;
+        float xr = Input.GetAxis("Mouse X") * Sens;
+        float yr = -Input.GetAxis("Mouse Y") * Sens;
         rotationX += yr;
         rotationY += xr;
 
         transform.rotation = Quaternion.Euler(new Vector3(rotationX, rotationY, 0));
 
         if(rotationX > maxAngle){
-            rotationX = Mathf.Lerp(rotationX, maxAngle, 0.1f / 2);
+            rotationX = Mathf.Lerp(rotationX, maxAngle, 0.05f * Time.deltaTime * 70);
         }
         else if(rotationX < minAngle) {
-            rotationX = Mathf.Lerp(rotationX, minAngle, 0.1f / 2);
+            rotationX = Mathf.Lerp(rotationX, minAngle, 0.05f * Time.deltaTime * 70);
         }
     }
 }

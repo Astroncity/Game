@@ -11,6 +11,7 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private Sprite thumbnailImage;
     private GameObject image;
 
+
     private GameObject prefab;
 
     public GameObject imageContainer;
@@ -33,17 +34,23 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         imageComponent.sprite = thumbnailImage;
 
         targetY = initY;
-
-        prefab = Resources.Load<GameObject>("prefabs/" + mName + ".prefab");
-        Debug.Log("prefabs/" + mName + ".prefab");
-        price = prefab.GetComponent<MachineData>().price;
-
+        string path = "prefabs/" + mName;
+        prefab = Resources.Load<GameObject>(path);
+        MachineData data = prefab.GetComponent<MachineData>();
+        price = data.price;
+        
+        transform.Find("price").GetComponent<Text>().text = price.ToString() + "g";
 
     }
+
+
 
     void Update() {
         if(isHovering) {
             form.position = Vector3.Lerp(form.position, new Vector3(form.position.x, targetY + hoverOffset, form.position.z), Time.deltaTime * 10f);
+            if(Input.GetMouseButtonDown(0)) {
+                player.select(prefab);
+            }
         }
         else {
             form.position = Vector3.Lerp(form.position, new Vector3(form.position.x, targetY, form.position.z), Time.deltaTime * 10f);
