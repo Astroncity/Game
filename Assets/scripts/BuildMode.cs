@@ -104,12 +104,13 @@ public class BuildMode : MonoBehaviour
         else {
             Cursor.lockState = CursorLockMode.None;
         }*/
-
-        float xr = Input.GetAxis("Mouse X") * sens;
-        float yr = -Input.GetAxis("Mouse Y") * sens;
-        rotationX += yr;
-        rotationY += xr;
-        transform.rotation = Quaternion.Euler(new Vector3(rotationX, rotationY, 0));
+        if(focused){
+            float xr = Input.GetAxis("Mouse X") * sens;
+            float yr = -Input.GetAxis("Mouse Y") * sens;
+            rotationX += yr;
+            rotationY += xr;
+            transform.rotation = Quaternion.Euler(new Vector3(rotationX, rotationY, 0));
+        }
 
         if(Input.GetKeyDown(KeyCode.B)) {
             mainCam.SetActive(true);

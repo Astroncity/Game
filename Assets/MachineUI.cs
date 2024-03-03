@@ -24,18 +24,39 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private float targetY;
     public float hoverOffset = 50f;
 
+    private resourcessub resources;
+
     void Start() {
+        resources = GameObject.Find("machinedata").GetComponent<resourcessub>();
         player = GameObject.Find("BuildModeCam").GetComponent<BuildMode>();
         initY = form.position.y;
         GetComponentInChildren<Text>().text = mName;
-        thumbnailImage = Resources.Load<Sprite>("MachineThumbnails/" + mName + "Image");
+        Sprite thumbnailImage = null;
+        foreach(Sprite sprite in resources.MachineThumbnails) {
+            if(sprite.name == mName + "Image") {
+                thumbnailImage = sprite;
+                break;
+            }
+        }
+        
+        foreach(GameObject machine in resources.MachinePrefabs) {
+            if(machine.name == mName) {
+                prefab = machine;
+                break;
+            }
+        }
+
+        if(thumbnailImage == null) {
+            Debug.LogError("No thumbnail found for " + mName);
+            return;
+        }
 
         Image imageComponent = imageContainer.GetComponent<Image>();
         imageComponent.sprite = thumbnailImage;
 
         targetY = initY;
-        string path = "prefabs/" + mName;
-        prefab = Resources.Load<GameObject>(path);
+
+
         MachineData data = prefab.GetComponent<MachineData>();
         price = data.price;
         
