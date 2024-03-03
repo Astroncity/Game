@@ -6,7 +6,7 @@ public class BaseMachine : MonoBehaviour
 {
     // Start is called before the first frame update
     public bool colliding = false;
-    public Collider col;
+    public Collider col = null;
     public GameObject arrowP;
 
     public GameObject arrow;
@@ -16,11 +16,14 @@ public class BaseMachine : MonoBehaviour
         arrow = Instantiate(arrowP, transform, false);
         arrow.transform.position = transform.position + new Vector3(0, 1, 0);
         arrow.SetActive(false);
+
+        col = null;
+        colliding = false;
     }
 
 
     private void OnTriggerEnter(Collider collision) {
-        if(collision.gameObject.CompareTag("machine")){
+        if(!collision.gameObject.CompareTag("Ground")){
             colliding = true;
             col = collision;
         }
@@ -28,7 +31,7 @@ public class BaseMachine : MonoBehaviour
 
     private void OnTriggerExit(Collider collision) {
         col = null;
-        if(collision.gameObject.CompareTag("machine")){
+        if(!collision.gameObject.CompareTag("Ground")){
             colliding = false;
             col = null;
         }

@@ -74,6 +74,10 @@ public class BuildMode : MonoBehaviour
         Debug.Log(prefab.name);
         selectedObejectPrefab = prefab;
         liveSelected = Instantiate(selectedObejectPrefab, Vector3.zero, selectedObejectPrefab.transform.rotation);
+        Collider[] temp = liveSelected.GetComponentsInChildren<Collider>();
+        foreach(Collider c in temp) {
+            if(c.name != liveSelected.name) c.enabled = false;
+        }
 
         Renderer liveRend; 
 
