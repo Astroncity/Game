@@ -50,6 +50,7 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             form.position = Vector3.Lerp(form.position, new Vector3(form.position.x, targetY + hoverOffset, form.position.z), Time.deltaTime * 10f);
             if(Input.GetMouseButtonDown(0)) {
                 player.select(prefab);
+                player.toggleMenu();
             }
         }
         else {
@@ -59,11 +60,9 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerEnter(PointerEventData eventData) {
         isHovering = true;
-        player.focused = false;
     }
 
     public void OnPointerExit(PointerEventData eventData) {
         isHovering = false;
-        player.focused = true;
     }
 }

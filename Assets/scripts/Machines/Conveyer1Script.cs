@@ -17,8 +17,9 @@ public class Conveyer1Script : MonoBehaviour
     }
 
     void OnCollisionEnter(Collision other) {
-        if(other.gameObject.tag == "Item") {
+        if(other.gameObject.tag == "Item" || other.gameObject.tag == "Player") {
             other.gameObject.GetComponent<Rigidbody>().velocity = transform.right * 250 * Time.deltaTime;
         }
+        Debug.Log("Collided with " + other.gameObject.name);
     }
 }

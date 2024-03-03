@@ -41,7 +41,7 @@ public class playerHandler : MonoBehaviour {
         if(Input.GetKey(KeyCode.D)) {
             transform.Translate(transform.right * speed * Time.deltaTime, Space.World);
         }
-        if(Input.GetKey(KeyCode.B)) {
+        if(Input.GetKeyDown(KeyCode.B)) {
             cam.SetActive(false);
             buildCam.SetActive(true);
         }

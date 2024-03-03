@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+
+public struct plateData{
+    public float data;
+    public Vector3 hitPoint;
+}
+
 public class BuildMode : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -38,19 +45,21 @@ public class BuildMode : MonoBehaviour
     private BaseMachine baseMachine;
     private Vector2 offset;
 
+    private GameObject plate;
 
-    void Start()
+
+    void OnEnable()
     {
 
-        ui.SetActive(true);
-        Cursor.lockState = CursorLockMode.None;
+        //?ui.SetActive(true);
+        Cursor.lockState = CursorLockMode.Locked;
         focused = true;
 
 
         player.GetComponent<playerHandler>().canMove = false;
         buildCam = GetComponent<Camera>();
         plateY = marker.GetComponent<BaseMarker>().plate.transform.position.y;
-        // add offset to include plate height
+        plate = marker.GetComponent<BaseMarker>().plate;
         plateY += marker.GetComponent<BaseMarker>().plate.GetComponent<Collider>().bounds.extents.y;
 
 
@@ -77,12 +86,13 @@ public class BuildMode : MonoBehaviour
         }
         col = liveSelected.GetComponent<Collider>();
         baseMachine = liveSelected.GetComponent<BaseMachine>();
+        baseMachine.arrow.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButton(1)) {
+        /*if(Input.GetMouseButton(1)) {
             Cursor.lockState = CursorLockMode.Locked;
             float xr = Input.GetAxis("Mouse X") * sens;
             float yr = -Input.GetAxis("Mouse Y") * sens;
@@ -93,18 +103,28 @@ public class BuildMode : MonoBehaviour
         }
         else {
             Cursor.lockState = CursorLockMode.None;
-        }
+        }*/
 
-        if(Input.GetKey(KeyCode.Escape)) {
+        float xr = Input.GetAxis("Mouse X") * sens;
+        float yr = -Input.GetAxis("Mouse Y") * sens;
+        rotationX += yr;
+        rotationY += xr;
+        transform.rotation = Quaternion.Euler(new Vector3(rotationX, rotationY, 0));
+
+        if(Input.GetKeyDown(KeyCode.B)) {
             mainCam.SetActive(true);
             ui.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
-            gameObject.SetActive(false);
             player.GetComponent<playerHandler>().canMove = true;
 
             if(liveSelected != null) {
                 Destroy(liveSelected);
             }
+            gameObject.SetActive(false);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Tab)){
+            toggleMenu();
         }
 
 
@@ -115,6 +135,13 @@ public class BuildMode : MonoBehaviour
             displayHolo();
         }
 
+    }
+
+
+    public void toggleMenu(){
+        focused = !focused;
+        ui.SetActive(!focused);
+        Cursor.lockState = focused ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
     void move() {
@@ -130,17 +157,24 @@ public class BuildMode : MonoBehaviour
         if(Input.GetKey(KeyCode.D)) {
             transform.Translate(transform.right * speed * Time.deltaTime, Space.World);
         }
+        if(Input.GetKey(KeyCode.Space)) {
+            transform.Translate(transform.up * speed * Time.deltaTime, Space.World);
+        }
+        if(Input.GetKey(KeyCode.LeftShift)) {
+            transform.Translate(transform.up * -speed * Time.deltaTime, Space.World);
+        }
     }
 
     public void displayHolo() {
         Vector3 mouse = Input.mousePosition;
-        float distance = getDistanceFromPlate();
+        plateData dat = getDistanceFromPlate();
+        float distance = dat.data;
         if(distance == -1) { return; }
         mouse.z = distance;
 
-        liveSelected.transform.position = buildCam.ScreenToWorldPoint(mouse);
+        //liveSelected.transform.position = buildCam.ScreenToWorldPoint(mouse);
+        liveSelected.transform.position = dat.hitPoint;
         float posy;
-        // set y position to plate y taking into account the height of the object with the collider and the width of the plate
         posy = plateY;
 
 
@@ -163,9 +197,19 @@ public class BuildMode : MonoBehaviour
             }
         }
 
+        baseMachine.arrow.SetActive(true);
+
 
         if(Input.GetMouseButtonDown(0) && !collided) {
             Instantiate(selectedObejectPrefab, liveSelected.transform.position, liveSelected.transform.rotation);
+        }
+        if(Input.GetMouseButtonDown(1) && collided) {
+            Destroy(baseMachine.col.gameObject);
+            baseMachine.col = null;
+            baseMachine.colliding = false;
+        }
+        if(Input.GetKeyDown(KeyCode.R)) {
+            liveSelected.transform.Rotate(0, 90, 0);
         }
     }
 
@@ -177,14 +221,16 @@ public class BuildMode : MonoBehaviour
 
     }
 
-    public float getDistanceFromPlate() {
+    public plateData getDistanceFromPlate() {
         RaycastHit hit;
         Ray ray = buildCam.ScreenPointToRay(Input.mousePosition);
         //Debug.DrawRay(ray.origin, ray.direction, Color.red, 200, false);
         bool DidHit = Physics.Raycast(ray, out hit, 200f);
-        if(!DidHit) { return -1; }
+        if(!DidHit){
+            return new plateData{data = -1, hitPoint = Vector3.zero};
+        }
         else {
-            return hit.distance;
+            return new plateData{data = hit.distance, hitPoint = hit.point};
         }
     }
 }
