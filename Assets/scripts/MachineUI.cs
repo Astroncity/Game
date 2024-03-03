@@ -12,7 +12,7 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private GameObject image;
 
 
-    private GameObject prefab;
+    public GameObject prefab;
 
     public GameObject imageContainer;
     public RectTransform form;
@@ -26,12 +26,14 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private resourcessub resources;
 
+
     void Start() {
         resources = GameObject.Find("machinedata").GetComponent<resourcessub>();
         player = GameObject.Find("BuildModeCam").GetComponent<BuildMode>();
         initY = form.position.y;
         GetComponentInChildren<Text>().text = mName;
         Sprite thumbnailImage = null;
+        prefab = null;
         foreach(Sprite sprite in resources.MachineThumbnails) {
             if(sprite.name == mName + "Image") {
                 thumbnailImage = sprite;
@@ -47,7 +49,11 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         }
 
         if(thumbnailImage == null) {
-            Debug.LogError("No thumbnail found for " + mName);
+            Debug.Log("No thumbnail found for " + mName);
+            return;
+        }
+        if(prefab == null) {
+            Debug.Log("No prefab found for " + mName);
             return;
         }
 
@@ -69,12 +75,11 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     void Update() {
         if(isHovering) {
             form.position = Vector3.Lerp(form.position, new Vector3(form.position.x, targetY + hoverOffset, form.position.z), Time.deltaTime * 10f);
-            if(Input.GetMouseButtonDown(0)) {
+            if(Input.GetMouseButtonDown(0)){
                 player.select(prefab);
-                player.toggleMenu();
             }
         }
-        else {
+        else{
             form.position = Vector3.Lerp(form.position, new Vector3(form.position.x, targetY, form.position.z), Time.deltaTime * 10f);
         }
     }
@@ -86,4 +91,10 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public void OnPointerExit(PointerEventData eventData) {
         isHovering = false;
     }
+
+    void OnDisable() {
+        isHovering = false;
+        form.position = new Vector3(form.position.x, initY, form.position.z);
+    }
+
 }

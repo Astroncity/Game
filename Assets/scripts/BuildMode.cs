@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -47,6 +49,10 @@ public class BuildMode : MonoBehaviour
 
     private GameObject plate;
 
+    private GameObject panels;
+    public GameObject rotationPoint;
+    public rotator rotationScript;
+
 
     void OnEnable()
     {
@@ -68,6 +74,7 @@ public class BuildMode : MonoBehaviour
 
 
     public void select(GameObject prefab){
+        Debug.Log("ran Select");
         if(liveSelected != null) {
             Destroy(liveSelected);
         }
@@ -91,6 +98,14 @@ public class BuildMode : MonoBehaviour
         col = liveSelected.GetComponent<Collider>();
         baseMachine = liveSelected.GetComponent<BaseMachine>();
         baseMachine.arrow.SetActive(true);
+        try{
+            rotationPoint = liveSelected.transform.Find("rotationPoint").gameObject;
+            rotationScript = rotationPoint.GetComponent<rotator>();
+        }
+        catch{
+            rotationScript = null;
+        }
+        toggleMenu();
     }
 
     // Update is called once per frame
@@ -121,6 +136,7 @@ public class BuildMode : MonoBehaviour
             ui.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             player.GetComponent<playerHandler>().canMove = true;
+            player.GetComponent<playerHandler>().inBuildMode = false;
 
             if(liveSelected != null) {
                 Destroy(liveSelected);
@@ -177,50 +193,74 @@ public class BuildMode : MonoBehaviour
         if(distance == -1) { return; }
         mouse.z = distance;
 
-        //liveSelected.transform.position = buildCam.ScreenToWorldPoint(mouse);
         liveSelected.transform.position = dat.hitPoint;
-        float posy;
-        posy = plateY;
-
-
+        float posy = plateY + selectedObejectPrefab.transform.position.y;
         liveSelected.transform.position = new Vector3(liveSelected.transform.position.x, posy, liveSelected.transform.position.z);
 
+
+
+        // Snap to grid
         Vector3 temp = liveSelected.transform.position;
-        temp.x = RoundTo(temp.x, (float)tileSize) + selectedObejectPrefab.transform.position.x ; temp.z = RoundTo(temp.z, (float)tileSize) + selectedObejectPrefab.transform.position.z;
+
+        if(rotationScript != null && (rotationScript.rotation == 90 || rotationScript.rotation == 270)) {
+            temp += rotationScript.degree90offset * 1.2f;
+        }
+
+        temp.x = RoundTo(temp.x, tileSize);
+        temp.z = RoundTo(temp.z, tileSize);
+
+        // if the width is odd, the object will be placed in the center of the tile
+        // do not use scale
+        if(Mathf.RoundToInt(liveSelected.GetComponent<Collider>().bounds.size.x) % 2 != 0) {
+            Debug.Log("Before X: " + temp.x);
+            temp.x += (tileSize / 2f);
+            Debug.Log("After X: " + temp.x);
+        }
+        if(Mathf.RoundToInt(liveSelected.GetComponent<Collider>().bounds.size.z) % 2 != 1) {
+            temp.z += (tileSize / 2f);
+        }
         liveSelected.transform.position = temp;
 
-        //check collision
+        // Check collision
         bool collided = baseMachine.colliding;
-        if(collided) {
-            foreach(Renderer rend in liveRends) {
-                rend.material = holographicRed;
-            }
-        }
-        else{
-            foreach(Renderer rend in liveRends) {
-                rend.material = holographicGreen;
-            }
+        foreach(Renderer rend in liveRends) {
+            rend.material = collided ? holographicRed : holographicGreen;
         }
 
         baseMachine.arrow.SetActive(true);
 
-
+        // Instantiate object on left-click if not collided
         if(Input.GetMouseButtonDown(0) && !collided) {
             Instantiate(selectedObejectPrefab, liveSelected.transform.position, liveSelected.transform.rotation);
         }
+        // Destroy object on right-click if collided
         if(Input.GetMouseButtonDown(1) && collided) {
             Destroy(baseMachine.col.gameObject);
             baseMachine.col = null;
             baseMachine.colliding = false;
         }
+        // Rotate object on 'R' key press
         if(Input.GetKeyDown(KeyCode.R)) {
-            liveSelected.transform.Rotate(0, 90, 0);
+            if(rotationPoint != null) {
+                liveSelected.transform.RotateAround(rotationPoint.transform.position, Vector3.up, 90);
+                rotationScript.rotation += 90; 
+            } else {
+                liveSelected.transform.Rotate(0, 90, 0, Space.World);
+            }
         }
     }
 
     public static float RoundTo(float value, float multipleOf) {
-        return Mathf.Round(value / multipleOf) * multipleOf;
+        float halfMultiple = multipleOf / 2;
+        float rounded = Mathf.Round(value / multipleOf) * multipleOf;
+
+        if (value - (rounded - halfMultiple) < (rounded + halfMultiple) - value) {
+            return rounded - halfMultiple;
+        } else {
+            return rounded + halfMultiple;
+        }
     }
+
 
     public void loadUI() {
 

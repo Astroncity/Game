@@ -12,6 +12,10 @@ public class playerHandler : MonoBehaviour {
     public GameObject buildCam;
     public bool canMove = true;
     private float sens;
+    public bool inBuildMode = false;
+
+    public GameObject testItem;
+
     void Start() {
         Application.targetFrameRate = 144;
         speed = 5f;
@@ -44,6 +48,15 @@ public class playerHandler : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.B)) {
             cam.SetActive(false);
             buildCam.SetActive(true);
+            inBuildMode = true;
+        }
+        if(Input.GetKeyDown(KeyCode.F)){
+            //GameObject ball = Instantiate(testItem, transform.position + transform.forward * 2, Quaternion.identity);
+            for(int i = 0; i < 50; i++) {
+                Vector3 randomOffset = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+                GameObject ball = Instantiate(testItem, transform.position + transform.forward * 2 + randomOffset, Quaternion.identity);
+                ball.GetComponent<Renderer>().material.color = new Color(Random.value, Random.value, Random.value);
+            }
         }
 
         //cam

@@ -19,9 +19,16 @@ public class itemScript : MonoBehaviour
     private Vector3 defaultScale;
     private Vector3 activeScale;   
 
+    public playerHandler player;
+
+    public static int count = 0;
+
+
     void Start() {
+        count++;
         mainCamOBJ = GameObject.Find("Main Camera");
         mainCam = mainCamOBJ.GetComponent<Camera>();
+        player = GameObject.Find("Player").GetComponent<playerHandler>();
         Crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
         defaultColor = Crosshair.color;
         Debug.Log("DEFAULT: " + defaultColor);
@@ -34,6 +41,14 @@ public class itemScript : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
+        if(player.inBuildMode){
+            return;
+        }
+        if(mainCamOBJ == null){
+            mainCamOBJ = GameObject.Find("Main Camera");
+            mainCam = mainCamOBJ.GetComponent<Camera>();
+            return;
+        }
         checkMouseOn();
         hold();
         if(isHolding){
