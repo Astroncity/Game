@@ -3,7 +3,12 @@ guid: 45e39a1a314431c4a95a875fe813816e
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: colormap
+    second: {fileID: 2100000, guid: b7c3889a0c72b7c45983934237a3b7bd, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -19,6 +19,10 @@ public class BaseMachine : MonoBehaviour
 
         col = null;
         colliding = false;
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        foreach(Renderer rend in renderers){
+            rend.material.SetFloat("_Smoothness", 0.7f);
+        }
     }
 
 

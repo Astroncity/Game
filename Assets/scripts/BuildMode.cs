@@ -53,6 +53,11 @@ public class BuildMode : MonoBehaviour
     public GameObject rotationPoint;
     public rotator rotationScript;
 
+    public Vector3 oldPos;
+    public Quaternion oldRot;
+    private bool lerpForward = true;
+    private bool lerpBack = false;
+
 
     void OnEnable()
     {
@@ -68,6 +73,16 @@ public class BuildMode : MonoBehaviour
         plate = marker.GetComponent<BaseMarker>().plate;
         plateY += marker.GetComponent<BaseMarker>().plate.GetComponent<Collider>().bounds.extents.y;
 
+        oldPos = marker.transform.position;
+        oldPos.y = plateY + 15f;
+        oldRot = Quaternion.Euler(55, 0, 0);
+
+
+        transform.position = mainCam.transform.position;
+        transform.rotation = mainCam.transform.rotation;
+        rotationX = 55; //? rotation that is set in the editor
+
+        lerpForward = true;
 
     
     }
@@ -111,19 +126,26 @@ public class BuildMode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*if(Input.GetMouseButton(1)) {
-            Cursor.lockState = CursorLockMode.Locked;
-            float xr = Input.GetAxis("Mouse X") * sens;
-            float yr = -Input.GetAxis("Mouse Y") * sens;
-            rotationX += yr;
-            rotationY += xr;
 
-            transform.rotation = Quaternion.Euler(new Vector3(rotationX, rotationY, 0));
+        float epsilon = 0.05f;
+        if(lerpForward){
+            transform.position = Vector3.Lerp(transform.position, oldPos, 0.05f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, oldRot, 0.05f);
         }
-        else {
-            Cursor.lockState = CursorLockMode.None;
-        }*/
-        if(focused){
+
+        if(lerpBack){
+            transform.position = Vector3.Lerp(transform.position, mainCam.transform.position, 0.05f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, mainCam.transform.rotation, 0.05f);
+        }
+
+
+        if(Math.Abs((transform.position - oldPos).magnitude) > epsilon && lerpForward){
+            return;
+        }else{
+            lerpForward = false;
+        }
+        
+        if(focused && !lerpBack && !lerpForward){
             float xr = Input.GetAxis("Mouse X") * sens;
             float yr = -Input.GetAxis("Mouse Y") * sens;
             rotationX += yr;
@@ -132,6 +154,11 @@ public class BuildMode : MonoBehaviour
         }
 
         if(Input.GetKeyDown(KeyCode.B)) {
+            lerpBack = true;
+        }
+
+        if(Math.Abs((transform.position - mainCam.transform.position).magnitude) < epsilon && lerpBack) {
+            lerpBack = false;
             mainCam.SetActive(true);
             ui.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
@@ -148,9 +175,7 @@ public class BuildMode : MonoBehaviour
             toggleMenu();
         }
 
-
-
-        move();
+        if(!lerpForward && !lerpBack) move();
 
         if(liveSelected != null && focused) {
             displayHolo();
