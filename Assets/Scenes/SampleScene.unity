@@ -1045,9 +1045,11 @@ MonoBehaviour:
   MachineThumbnails:
   - {fileID: 21300000, guid: a58a2dc94e310af41b4ca14a34ea97d9, type: 3}
   - {fileID: 21300000, guid: a59d6c0a5282441469ba998b8aff8d43, type: 3}
+  - {fileID: 21300000, guid: 1178ce30c6a907e41bf214bdd04014f4, type: 3}
   MachinePrefabs:
   - {fileID: 2465301700284595655, guid: 373f4b53570d49c43ba203e7e47ddb20, type: 3}
   - {fileID: 373297381277804322, guid: 4994d8bfede49f246be05423318334d5, type: 3}
+  - {fileID: 7189708381351420243, guid: 6433bce7f76339844b5fa5670ebc3d7c, type: 3}
 --- !u!65 &1761181683
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1246,6 +1248,7 @@ MonoBehaviour:
   machineNames:
   - Conveyer1
   - Ramp
+  - ConveyerRight
 --- !u!1 &1844784983
 GameObject:
   m_ObjectHideFlags: 0

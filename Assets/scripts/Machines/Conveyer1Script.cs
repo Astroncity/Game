@@ -6,6 +6,7 @@ public class Conveyer1Script : MonoBehaviour
 {
     // Start is called before the first frame update
     public float force = 50;
+    public float rotationOffset = 0;
     void Start()
     {
         
@@ -21,7 +22,11 @@ public class Conveyer1Script : MonoBehaviour
         if(other.gameObject.tag == "Item") {
             //! GetComponent call is inefficient
             //TODO: Replace with a better method
-            other.rigidbody.velocity = transform.right * force * Time.deltaTime;
+            transform.Rotate(new Vector3(0, rotationOffset, 0));
+            Vector3 temp = transform.right;
+            transform.Rotate(new Vector3(0, -rotationOffset, 0));
+
+            other.rigidbody.velocity = temp * force * Time.deltaTime;
         }
     }
 }

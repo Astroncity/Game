@@ -310,6 +310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   force: 50
+  rotationOffset: 0
 --- !u!65 &1079589393244181748
 BoxCollider:
   m_ObjectHideFlags: 0
