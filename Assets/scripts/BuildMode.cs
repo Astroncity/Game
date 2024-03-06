@@ -119,6 +119,7 @@ public class BuildMode : MonoBehaviour
         }
         catch{
             rotationScript = null;
+            Debug.Log("No rotator");
         }
         toggleMenu();
     }
@@ -227,15 +228,31 @@ public class BuildMode : MonoBehaviour
         // Snap to grid
         Vector3 temp = liveSelected.transform.position;
 
-        if(rotationScript != null && (rotationScript.rotation == 90 || rotationScript.rotation == 270)) {
-            temp += rotationScript.degree90offset * 1.2f;
-        }
+        
         if(rotationScript != null) {
             temp -= rotationScript.regOffset;
         }
 
+        if(rotationScript != null && (rotationScript.rotation == 90 || rotationScript.rotation == 270)) {
+            temp -= rotationScript.degree90offset * 1.5f;
+        }
+
+        if(rotationScript != null) {
+            temp -= rotationScript.regOffset * 1.5f;
+        }
+
+        temp.x -= selectedObejectPrefab.transform.position.x;
+        temp.z -= selectedObejectPrefab.transform.position.z;
+
         temp.x = RoundTo(temp.x, tileSize);
         temp.z = RoundTo(temp.z, tileSize);
+
+        if(rotationScript != null && (rotationScript.rotation == 90 || rotationScript.rotation == 270)) {
+            temp += rotationScript.degree90offset;
+        }
+
+        temp.x += selectedObejectPrefab.transform.position.x;
+        temp.z += selectedObejectPrefab.transform.position.z;
 
         if(rotationScript != null) {
             temp += rotationScript.regOffset;
@@ -244,11 +261,9 @@ public class BuildMode : MonoBehaviour
         // if the width is odd, the object will be placed in the center of the tile
         // do not use scale
         if(Mathf.RoundToInt(liveSelected.GetComponent<Collider>().bounds.size.x) % 2 != 0) {
-            Debug.Log("Before X: " + temp.x);
-            temp.x += (tileSize / 2f) + selectedObejectPrefab.transform.position.x;
-            Debug.Log("After X: " + temp.x);
+            temp.x += (tileSize / 2f);
         }
-        if(Mathf.RoundToInt(liveSelected.GetComponent<Collider>().bounds.size.z) % 2 != 1) {
+        if(Mathf.RoundToInt(liveSelected.GetComponent<Collider>().bounds.size.z) % 2 != 0) {
             temp.z += (tileSize / 2f);
         }
         liveSelected.transform.position = temp;
@@ -279,6 +294,9 @@ public class BuildMode : MonoBehaviour
                 rotationScript.rotation += 90; 
             } else {
                 liveSelected.transform.Rotate(0, 90, 0, Space.World);
+            }
+            if(rotationScript.rotation >= 360) {
+                rotationScript.rotation -= 360;
             }
         }
     }
