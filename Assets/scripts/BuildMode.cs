@@ -89,11 +89,11 @@ public class BuildMode : MonoBehaviour
 
 
     public void select(GameObject prefab){
-        Debug.Log("ran Select");
         if(liveSelected != null) {
             Destroy(liveSelected);
         }
-        Debug.Log(prefab.name);
+
+        //Prefab && object setup
         selectedObejectPrefab = prefab;
         liveSelected = Instantiate(selectedObejectPrefab, Vector3.zero, selectedObejectPrefab.transform.rotation);
         Collider[] temp = liveSelected.GetComponentsInChildren<Collider>();
@@ -103,6 +103,7 @@ public class BuildMode : MonoBehaviour
 
         Renderer liveRend; 
 
+        //If object has children get their renderers instead
         if(TryGetComponent<Renderer>(out liveRend)){
             liveRends = new Renderer[1];
             liveRends[0] = liveRend;
@@ -110,9 +111,13 @@ public class BuildMode : MonoBehaviour
         else {
             liveRends = liveSelected.GetComponentsInChildren<Renderer>();
         }
+
+        //Get collider and arrow
         col = liveSelected.GetComponent<Collider>();
         baseMachine = liveSelected.GetComponent<BaseMachine>();
         baseMachine.arrow.SetActive(true);
+
+        //Get rotator if there is one
         try{
             rotationPoint = liveSelected.transform.Find("rotationPoint").gameObject;
             rotationScript = rotationPoint.GetComponent<rotator>();
@@ -228,18 +233,6 @@ public class BuildMode : MonoBehaviour
         // Snap to grid
         Vector3 temp = liveSelected.transform.position;
 
-        
-        if(rotationScript != null) {
-            temp -= rotationScript.regOffset;
-        }
-
-        if(rotationScript != null && (rotationScript.rotation == 90 || rotationScript.rotation == 270)) {
-            temp -= rotationScript.degree90offset * 1.5f;
-        }
-
-        if(rotationScript != null) {
-            temp -= rotationScript.regOffset * 1.5f;
-        }
 
         temp.x -= selectedObejectPrefab.transform.position.x;
         temp.z -= selectedObejectPrefab.transform.position.z;
@@ -247,16 +240,10 @@ public class BuildMode : MonoBehaviour
         temp.x = RoundTo(temp.x, tileSize);
         temp.z = RoundTo(temp.z, tileSize);
 
-        if(rotationScript != null && (rotationScript.rotation == 90 || rotationScript.rotation == 270)) {
-            temp += rotationScript.degree90offset;
-        }
 
         temp.x += selectedObejectPrefab.transform.position.x;
         temp.z += selectedObejectPrefab.transform.position.z;
 
-        if(rotationScript != null) {
-            temp += rotationScript.regOffset;
-        }
 
         // if the width is odd, the object will be placed in the center of the tile
         // do not use scale
@@ -277,26 +264,24 @@ public class BuildMode : MonoBehaviour
         baseMachine.arrow.SetActive(true);
 
         // Instantiate object on left-click if not collided
-        if(Input.GetMouseButtonDown(0) && !collided) {
+        if(Input.GetMouseButtonDown(0) && !collided){
             Instantiate(selectedObejectPrefab, liveSelected.transform.position, liveSelected.transform.rotation);
         }
         // Destroy object on right-click if collided
-        if(Input.GetMouseButtonDown(1) && collided) {
+        if(Input.GetMouseButtonDown(1) && collided){
             GameObject obj = baseMachine.col.gameObject;
             Destroy(obj);
             baseMachine.col = null;
             baseMachine.colliding = false;
         }
+
         // Rotate object on 'R' key press
-        if(Input.GetKeyDown(KeyCode.R)) {
+        if(Input.GetKeyDown(KeyCode.R)){
             if(rotationPoint != null) {
                 liveSelected.transform.RotateAround(rotationPoint.transform.position, Vector3.up, 90);
                 rotationScript.rotation += 90; 
             } else {
                 liveSelected.transform.Rotate(0, 90, 0, Space.World);
-            }
-            if(rotationScript.rotation >= 360) {
-                rotationScript.rotation -= 360;
             }
         }
     }
