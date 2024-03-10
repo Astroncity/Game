@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class itemScript : MonoBehaviour
-{
-    // Start is called before the first frame update
+public class itemScript : MonoBehaviour{
     private bool canHold = false;
     public bool isHolding = false;
+
     private GameObject mainCamOBJ;
     private Camera mainCam;
     private Image Crosshair;
@@ -24,7 +23,7 @@ public class itemScript : MonoBehaviour
     public static int count = 0;
 
 
-    void Start() {
+    void Start(){
         count++;
         mainCamOBJ = GameObject.Find("Main Camera");
         mainCam = mainCamOBJ.GetComponent<Camera>();
@@ -39,8 +38,8 @@ public class itemScript : MonoBehaviour
         activeScale = defaultScale * 1.5f;
     }
 
-    // Update is called once per frame
-    void Update() {
+
+    void Update(){
         if(player.inBuildMode){
             return;
         }
@@ -49,8 +48,10 @@ public class itemScript : MonoBehaviour
             mainCam = mainCamOBJ.GetComponent<Camera>();
             return;
         }
+
         checkMouseOn();
         hold();
+
         if(isHolding){
             Crosshair.color = Color.Lerp(Crosshair.color, isHoldingColor, 10f * Time.deltaTime);
             Crosshair.transform.localScale = Vector3.Lerp(Crosshair.transform.localScale, activeScale, 10f * Time.deltaTime);
@@ -65,10 +66,11 @@ public class itemScript : MonoBehaviour
         }
     }
 
-    void hold() {
-        if (isHolding && Input.GetMouseButton(0)) {
+    void hold(){
+        if (isHolding && Input.GetMouseButton(0)){
             transform.position = mainCam.transform.position + mainCam.transform.forward * 2;
-        } else {
+        } 
+        else{
             isHolding = false;
         }
     }

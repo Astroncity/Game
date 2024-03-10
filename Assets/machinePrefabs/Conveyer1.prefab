@@ -164,10 +164,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8049293c174a9d94b8c0d84b805d1a92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colliding: 0
-  col: {fileID: 0}
   arrowP: {fileID: 5072383472205582389, guid: 31452faf1c767084aba0064fb8a7b6c4, type: 3}
   arrow: {fileID: 5072383472205582389, guid: 31452faf1c767084aba0064fb8a7b6c4, type: 3}
+  colliding: 0
+  col: {fileID: 0}
 --- !u!114 &2465301700284595653
 MonoBehaviour:
   m_ObjectHideFlags: 0

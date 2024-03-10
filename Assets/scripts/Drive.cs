@@ -2,67 +2,59 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Drive : MonoBehaviour
-{
-    // Start is called before the first frame update
+public class Drive : MonoBehaviour{
     public GameObject player;
-
-    public GameObject frontLeftWheel;
-    public Rigidbody rb;
     public GameObject mainCamera;
-    public float motorForce = 10f;
+    public GameObject frontLeftWheel;
+
+    public Rigidbody rb;
+
+    public float motorForce = 5f;
     public float speedLimit = 100f;
     public float acceleration = 0f;
+    private float carlength;
 
+    private float accelerationIncrease = 0.5f;
     public bool inCar = false;
+    private wheel wheelScript;
 
-    void Start()
-    {
+
+    void Start(){
         rb.centerOfMass = new Vector3(0, -1f, 0);
+        wheelScript = frontLeftWheel.GetComponent<wheel>();
+        carlength = transform.Find("body").GetComponent<Renderer>().bounds.size.z;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+
+    void Update(){
         if(Input.GetKeyDown(KeyCode.E) && inCar) exit();
         else if(Input.GetKeyDown(KeyCode.E) && Vector3.Distance(player.transform.position, this.transform.position) < 10f) enter();
         if(inCar) drive();
     }
 
     void drive(){
-        if(Input.GetKey(KeyCode.W))
-        {
-            acceleration += 0.005f;
+        if(Input.GetKey(KeyCode.W)){
+            acceleration += accelerationIncrease * Time.deltaTime;
         }
-        else if(Input.GetKey(KeyCode.S))
-        {
-            acceleration -= 0.005f;
+        else if(Input.GetKey(KeyCode.S)){
+            acceleration -= accelerationIncrease * Time.deltaTime;
         }
+        
 
-        rb.AddForce(transform.forward * motorForce * Time.deltaTime * 10f * acceleration, ForceMode.Impulse);
+        rb.AddForce(transform.forward * motorForce * acceleration, ForceMode.Impulse);
 
-        if(acceleration > 1f){
-            acceleration = 1f;
-        }
-        else if(acceleration < -1f){
-            acceleration = -1f;
-        }
+        acceleration = Mathf.Clamp(acceleration, -1f, 1f);
+        acceleration *= 0.99f;
 
-        if(acceleration > 0){
-            acceleration -= 0.003f;
-        }
-        else if(acceleration < 0){
-            acceleration += 0.003f;
-        }
-
-
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, frontLeftWheel.transform.eulerAngles.y, 0), 0.8f * Time.deltaTime * rb.velocity.magnitude * acceleration);
+        float turnRad = carlength / Mathf.Tan(wheelScript.rotationAmount * Mathf.Deg2Rad);
+        float rotationAngle = rb.velocity.magnitude * Mathf.Rad2Deg / turnRad;
+        transform.Rotate(Vector3.up, rotationAngle * Time.deltaTime);
 
         if(rb.velocity.magnitude > speedLimit){
             rb.velocity = rb.velocity.normalized * speedLimit;
         }
-
     }
+
 
     void enter(){
         mainCamera.GetComponent<CameraController>().followingPlayer = false;

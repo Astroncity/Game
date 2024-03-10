@@ -3,22 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class wheel : MonoBehaviour
-{
+public class wheel : MonoBehaviour{
     // Start is called before the first frame update
     private Drive car;
     public float maxSteerAngle = 30;
-    private float rotationAmount = 0;
-    void Start()
-    {
+    [HideInInspector]
+    public float rotationAmount = 0;
+
+
+    void Start(){
         car = transform.parent.gameObject.GetComponent<Drive>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+
+    void Update(){
         if(car.inCar) handleRotation();
     }
+
 
     void handleRotation(){
         if(Input.GetKey(KeyCode.A)){

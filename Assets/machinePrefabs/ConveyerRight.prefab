@@ -111,8 +111,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.99999994, y: 0.25, z: 0.79999995}
-  m_Center: {x: 0.09353732, y: 0.125, z: 0}
+  m_Size: {x: 1.0747631, y: 0.25, z: 0.79999995}
+  m_Center: {x: 0.13091902, y: 0.125, z: -1.757042e-15}
 --- !u!54 &1464730336476721623
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -242,8 +242,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.25000006, z: 0.8427464}
-  m_Center: {x: 0.9994502, y: 0.114524886, z: -0.025680497}
+  m_Size: {x: 0.7292989, y: 0.25000006, z: 0.8427464}
+  m_Center: {x: 1.0348005, y: 0.114524886, z: -0.025680482}
 --- !u!114 &1536017592084248556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,7 +270,7 @@ GameObject:
   - component: {fileID: 8266846944606734273}
   - component: {fileID: 3500058095703333364}
   - component: {fileID: 6975689935978178918}
-  - component: {fileID: 791348378435297005}
+  - component: {fileID: 4059010052148815322}
   m_Layer: 0
   m_Name: side
   m_TagString: Untagged
@@ -359,8 +359,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &791348378435297005
-MeshCollider:
+--- !u!65 &4059010052148815322
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -369,10 +369,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2345237962244854009, guid: bb5d81ea803a58d449b39ea7db331594, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 1.9059129, y: 0.29894623, z: 1.0005436}
+  m_Center: {x: 0.5464938, y: 0.14947306, z: 0.00027120113}
 --- !u!1 &7189708381351420243
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,10 +466,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8049293c174a9d94b8c0d84b805d1a92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colliding: 0
-  col: {fileID: 0}
   arrowP: {fileID: 5072383472205582389, guid: 31452faf1c767084aba0064fb8a7b6c4, type: 3}
   arrow: {fileID: 5072383472205582389, guid: 31452faf1c767084aba0064fb8a7b6c4, type: 3}
+  colliding: 0
+  col: {fileID: 0}
 --- !u!1 &9007594475674366137
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,7 +495,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9007594475674366137}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.554, y: -0, z: 0}
+  m_LocalPosition: {x: 0.549, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

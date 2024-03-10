@@ -412,14 +412,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCam: {fileID: 963194225}
   buildCam: {fileID: 409251908}
-  speed: 15
   player: {fileID: 2066043281}
   marker: {fileID: 197083425}
   ui: {fileID: 1791679785}
   holographicGreen: {fileID: 2100000, guid: 3d2332cfe6e89aa45b12d878cf6c3017, type: 2}
   holographicRed: {fileID: 2100000, guid: a8812c3191b6e794396a922894f1022c, type: 2}
-  sens: 1
   tileSize: 1
+  sens: 1
+  speed: 15
   focused: 0
   rotationPoint: {fileID: 0}
   rotationScript: {fileID: 0}
@@ -554,7 +554,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.8
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1845,6 +1845,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSteerAngle: 30
+  rotationAmount: 0
 --- !u!23 &6747011966134602593
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1952,10 +1953,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 2066043281}
+  mainCamera: {fileID: 963194225}
   frontLeftWheel: {fileID: 3799185168936142690}
   rb: {fileID: 6826652051125066478}
-  mainCamera: {fileID: 963194225}
-  motorForce: 20000
+  motorForce: 10000
   speedLimit: 20
   acceleration: 0
   inCar: 0
@@ -2126,6 +2127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSteerAngle: 30
+  rotationAmount: 0
 --- !u!4 &8619764111919781944
 Transform:
   m_ObjectHideFlags: 0

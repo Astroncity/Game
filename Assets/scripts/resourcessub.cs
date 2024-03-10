@@ -3,19 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class resourcessub : MonoBehaviour
-{
-    // Start is called before the first frame update
+public class resourcessub : MonoBehaviour{
     public Sprite[] MachineThumbnails;
     public GameObject[] MachinePrefabs;
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

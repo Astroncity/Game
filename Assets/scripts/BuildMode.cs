@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.Intrinsics;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.UI;
-
 
 
 public struct plateData{
@@ -12,21 +12,16 @@ public struct plateData{
     public Vector3 hitPoint;
 }
 
-public class BuildMode : MonoBehaviour
-{
-    // Start is called before the first frame update
+
+public class BuildMode : MonoBehaviour{
     public GameObject mainCam;
     public Camera buildCam;
 
-    public float speed;
     public GameObject player;
     public GameObject marker;
     public GameObject ui;
 
-    private GameObject prefab;
-
     private GameObject selectedObejectPrefab;
-
     private GameObject liveSelected;
     private Renderer[] liveRends;
 
@@ -35,42 +30,36 @@ public class BuildMode : MonoBehaviour
     public Material holographicRed;
 
     float plateY;
-    public float sens = 25f;
     public int tileSize = 1;
 
+    public float sens = 25f;
     private float rotationX = 0;
     private float rotationY = 0;
+    public float speed;
 
     public bool focused = true;
 
-    private Collider col;
     private BaseMachine baseMachine;
-    private Vector2 offset;
 
-    private GameObject plate;
-
-    private GameObject panels;
     public GameObject rotationPoint;
     public rotator rotationScript;
 
     public Vector3 oldPos;
     public Quaternion oldRot;
+
     private bool lerpForward = true;
     private bool lerpBack = false;
 
 
-    void OnEnable()
-    {
-
-        //?ui.SetActive(true);
+    void OnEnable(){
         Cursor.lockState = CursorLockMode.Locked;
         focused = true;
 
 
         player.GetComponent<playerHandler>().canMove = false;
         buildCam = GetComponent<Camera>();
+
         plateY = marker.GetComponent<BaseMarker>().plate.transform.position.y;
-        plate = marker.GetComponent<BaseMarker>().plate;
         plateY += marker.GetComponent<BaseMarker>().plate.GetComponent<Collider>().bounds.extents.y;
 
         oldPos = marker.transform.position;
@@ -83,8 +72,6 @@ public class BuildMode : MonoBehaviour
         rotationX = 55; //? rotation that is set in the editor
 
         lerpForward = true;
-
-    
     }
 
 
@@ -97,7 +84,7 @@ public class BuildMode : MonoBehaviour
         selectedObejectPrefab = prefab;
         liveSelected = Instantiate(selectedObejectPrefab, Vector3.zero, selectedObejectPrefab.transform.rotation);
         Collider[] temp = liveSelected.GetComponentsInChildren<Collider>();
-        foreach(Collider c in temp) {
+        foreach(Collider c in temp){
             if(c.name != liveSelected.name) c.enabled = false;
         }
 
@@ -108,12 +95,11 @@ public class BuildMode : MonoBehaviour
             liveRends = new Renderer[1];
             liveRends[0] = liveRend;
         }
-        else {
+        else{
             liveRends = liveSelected.GetComponentsInChildren<Renderer>();
         }
 
         //Get collider and arrow
-        col = liveSelected.GetComponent<Collider>();
         baseMachine = liveSelected.GetComponent<BaseMachine>();
         baseMachine.arrow.SetActive(true);
 
@@ -130,24 +116,21 @@ public class BuildMode : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-
+    void Update(){
         float epsilon = 0.05f;
         if(lerpForward){
             transform.position = Vector3.Lerp(transform.position, oldPos, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, oldRot, 0.05f);
         }
-
         if(lerpBack){
             transform.position = Vector3.Lerp(transform.position, mainCam.transform.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, mainCam.transform.rotation, 0.05f);
         }
 
-
         if(Math.Abs((transform.position - oldPos).magnitude) > epsilon && lerpForward){
             return;
-        }else{
+        }
+        else{
             lerpForward = false;
         }
         
@@ -159,11 +142,11 @@ public class BuildMode : MonoBehaviour
             transform.rotation = Quaternion.Euler(new Vector3(rotationX, rotationY, 0));
         }
 
-        if(Input.GetKeyDown(KeyCode.B)) {
+        if(Input.GetKeyDown(KeyCode.B)){
             lerpBack = true;
         }
 
-        if(Math.Abs((transform.position - mainCam.transform.position).magnitude) < epsilon && lerpBack) {
+        if(Math.Abs((transform.position - mainCam.transform.position).magnitude) < epsilon && lerpBack){
             lerpBack = false;
             mainCam.SetActive(true);
             ui.SetActive(false);
@@ -171,7 +154,7 @@ public class BuildMode : MonoBehaviour
             player.GetComponent<playerHandler>().canMove = true;
             player.GetComponent<playerHandler>().inBuildMode = false;
 
-            if(liveSelected != null) {
+            if(liveSelected != null){
                 Destroy(liveSelected);
             }
             gameObject.SetActive(false);
@@ -183,10 +166,9 @@ public class BuildMode : MonoBehaviour
 
         if(!lerpForward && !lerpBack) move();
 
-        if(liveSelected != null && focused) {
+        if(liveSelected != null && focused){
             displayHolo();
         }
-
     }
 
 
@@ -196,43 +178,41 @@ public class BuildMode : MonoBehaviour
         Cursor.lockState = focused ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
-    void move() {
-        if(Input.GetKey(KeyCode.W)) {
+
+    void move(){
+        if(Input.GetKey(KeyCode.W)){
             transform.Translate(transform.forward * speed * Time.deltaTime, Space.World);
         }
-        if(Input.GetKey(KeyCode.S)) {
+        if(Input.GetKey(KeyCode.S)){
             transform.Translate(transform.forward * -speed * Time.deltaTime, Space.World);
         }
-        if(Input.GetKey(KeyCode.A)) {
+        if(Input.GetKey(KeyCode.A)){
             transform.Translate(transform.right * -speed * Time.deltaTime, Space.World);
         }
-        if(Input.GetKey(KeyCode.D)) {
+        if(Input.GetKey(KeyCode.D)){
             transform.Translate(transform.right * speed * Time.deltaTime, Space.World);
         }
-        if(Input.GetKey(KeyCode.Space)) {
+        if(Input.GetKey(KeyCode.Space)){
             transform.Translate(transform.up * speed * Time.deltaTime, Space.World);
         }
-        if(Input.GetKey(KeyCode.LeftShift)) {
+        if(Input.GetKey(KeyCode.LeftShift)){
             transform.Translate(transform.up * -speed * Time.deltaTime, Space.World);
         }
     }
 
-    public void displayHolo() {
+
+    public void displayHolo(){
         Vector3 mouse = Input.mousePosition;
         plateData dat = getDistanceFromPlate();
         float distance = dat.data;
-        if(distance == -1) { return; }
+        if(distance == -1){return;}
         mouse.z = distance;
 
         liveSelected.transform.position = dat.hitPoint;
         float posy = plateY + selectedObejectPrefab.transform.position.y;
         liveSelected.transform.position = new Vector3(liveSelected.transform.position.x, posy, liveSelected.transform.position.z);
 
-
-
-        // Snap to grid
         Vector3 temp = liveSelected.transform.position;
-
 
         temp.x -= selectedObejectPrefab.transform.position.x;
         temp.z -= selectedObejectPrefab.transform.position.z;
@@ -240,24 +220,30 @@ public class BuildMode : MonoBehaviour
         temp.x = RoundTo(temp.x, tileSize);
         temp.z = RoundTo(temp.z, tileSize);
 
-
         temp.x += selectedObejectPrefab.transform.position.x;
         temp.z += selectedObejectPrefab.transform.position.z;
 
+        try{
+            if(rotationScript.rotation % 90 == 0 && rotationScript.rotation != 0){
+                temp -= rotationScript.degree90offset;
+            }
+        }
+        catch{}
+        
+
 
         // if the width is odd, the object will be placed in the center of the tile
-        // do not use scale
-        if(Mathf.RoundToInt(liveSelected.GetComponent<Collider>().bounds.size.x) % 2 != 0) {
+        if(Mathf.RoundToInt(liveSelected.GetComponent<Collider>().bounds.size.x) % 2 != 0){
             temp.x += (tileSize / 2f);
         }
-        if(Mathf.RoundToInt(liveSelected.GetComponent<Collider>().bounds.size.z) % 2 != 0) {
+        if(Mathf.RoundToInt(liveSelected.GetComponent<Collider>().bounds.size.z) % 2 != 0){
             temp.z += (tileSize / 2f);
         }
         liveSelected.transform.position = temp;
 
         // Check collision
         bool collided = baseMachine.colliding;
-        foreach(Renderer rend in liveRends) {
+        foreach(Renderer rend in liveRends){
             rend.material = collided ? holographicRed : holographicGreen;
         }
 
@@ -277,40 +263,41 @@ public class BuildMode : MonoBehaviour
 
         // Rotate object on 'R' key press
         if(Input.GetKeyDown(KeyCode.R)){
-            if(rotationPoint != null) {
+            if(rotationPoint != null){
                 liveSelected.transform.RotateAround(rotationPoint.transform.position, Vector3.up, 90);
                 rotationScript.rotation += 90; 
-            } else {
+                if(rotationScript.rotation == 360){
+                    rotationScript.rotation = 0;
+                }
+            }
+            else{
                 liveSelected.transform.Rotate(0, 90, 0, Space.World);
             }
         }
     }
 
-    public static float RoundTo(float value, float multipleOf) {
+    public static float RoundTo(float value, float multipleOf){
         float halfMultiple = multipleOf / 2;
         float rounded = Mathf.Round(value / multipleOf) * multipleOf;
 
-        if (value - (rounded - halfMultiple) < (rounded + halfMultiple) - value) {
+        if(value - (rounded - halfMultiple) < (rounded + halfMultiple) - value) {
             return rounded - halfMultiple;
-        } else {
+        } 
+        else{
             return rounded + halfMultiple;
         }
     }
 
 
-    public void loadUI() {
-
-    }
-
-    public plateData getDistanceFromPlate() {
+    public plateData getDistanceFromPlate(){
         RaycastHit hit;
         Ray ray = buildCam.ScreenPointToRay(Input.mousePosition);
-        //Debug.DrawRay(ray.origin, ray.direction, Color.red, 200, false);
         bool DidHit = Physics.Raycast(ray, out hit, 200f);
+
         if(!DidHit){
             return new plateData{data = -1, hitPoint = Vector3.zero};
         }
-        else {
+        else{
             return new plateData{data = hit.distance, hitPoint = hit.point};
         }
     }

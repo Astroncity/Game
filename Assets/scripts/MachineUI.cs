@@ -4,13 +4,12 @@ using UnityEngine.EventSystems;
 using System.IO;
 using System.Collections.Generic;
 
-public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
+public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler{
     public string mName;
     private int price;
 
     private Sprite thumbnailImage;
     private GameObject image;
-
 
     public GameObject prefab;
 
@@ -27,32 +26,33 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private resourcessub resources;
 
 
-    void Start() {
+    void Start(){
         resources = GameObject.Find("machinedata").GetComponent<resourcessub>();
         player = GameObject.Find("BuildModeCam").GetComponent<BuildMode>();
         initY = form.position.y;
         GetComponentInChildren<Text>().text = mName;
         Sprite thumbnailImage = null;
         prefab = null;
-        foreach(Sprite sprite in resources.MachineThumbnails) {
-            if(sprite.name == mName + "Image") {
+
+        foreach(Sprite sprite in resources.MachineThumbnails){
+            if(sprite.name == mName + "Image"){
                 thumbnailImage = sprite;
                 break;
             }
         }
         
-        foreach(GameObject machine in resources.MachinePrefabs) {
-            if(machine.name == mName) {
+        foreach(GameObject machine in resources.MachinePrefabs){
+            if(machine.name == mName){
                 prefab = machine;
                 break;
             }
         }
 
-        if(thumbnailImage == null) {
+        if(thumbnailImage == null){
             Debug.Log("No thumbnail found for " + mName);
             return;
         }
-        if(prefab == null) {
+        if(prefab == null){
             Debug.Log("No prefab found for " + mName);
             return;
         }
@@ -69,11 +69,10 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         transform.Find("price").GetComponent<Text>().text = price.ToString() + "g";
 
     }
+    
 
-
-
-    void Update() {
-        if(isHovering) {
+    void Update(){
+        if(isHovering){
             form.position = Vector3.Lerp(form.position, new Vector3(form.position.x, targetY + hoverOffset, form.position.z), Time.deltaTime * 10f);
             if(Input.GetMouseButtonDown(0)){
                 player.select(prefab);
@@ -84,15 +83,18 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         }
     }
 
-    public void OnPointerEnter(PointerEventData eventData) {
+
+    public void OnPointerEnter(PointerEventData eventData){
         isHovering = true;
     }
 
-    public void OnPointerExit(PointerEventData eventData) {
+
+    public void OnPointerExit(PointerEventData eventData){
         isHovering = false;
     }
 
-    void OnDisable() {
+
+    void OnDisable(){
         isHovering = false;
         form.position = new Vector3(form.position.x, initY, form.position.z);
     }

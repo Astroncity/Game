@@ -2,16 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour{
     public GameObject player;
     private Vector3 dist;
     private Vector3 carDist;
 
-    //Rotation Sensitivity
+    [Header("Rotation")]
     public float minAngle = -90f;
     public float maxAngle = 90f;
     public float Sens = 0.05f;
-
     private float rotationX = 0;
     private float rotationY = 0;
 
@@ -20,18 +19,14 @@ public class CameraController : MonoBehaviour {
 
     public GameObject car = null;
 
-  
-    //Rotation Value
 
-    void Start() {
+    void Start(){
         dist.x = transform.position.x - player.transform.position.x;
         dist.y = transform.position.y - player.transform.position.y - 1.15f;
         dist.z = transform.position.z - player.transform.position.z;
-
-        carDist = new Vector3(0, -6, 5);
     }
 
-    // Update is called once per frame
+
     void Update() {
         if(followingPlayer){
             followPlayer();
@@ -60,6 +55,7 @@ public class CameraController : MonoBehaviour {
     }
 
     void followCar(){
-        transform.position = car.transform.position - carDist;
+        transform.position = car.transform.position - car.transform.forward * 4 + car.transform.up * 6;
+        rotationY = Mathf.Lerp(rotationY, car.transform.eulerAngles.y, 0.025f);
     }
 }

@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseMachine : MonoBehaviour
-{
-    // Start is called before the first frame update
+public class BaseMachine : MonoBehaviour{
+    public GameObject arrowP;
+    [HideInInspector]
+    public GameObject arrow;
+    
     public bool colliding = false;
     public Collider col = null;
-    public GameObject arrowP;
 
-    public GameObject arrow;
 
     void Start()
     {
@@ -19,6 +19,7 @@ public class BaseMachine : MonoBehaviour
 
         col = null;
         colliding = false;
+
         Renderer[] renderers = GetComponentsInChildren<Renderer>();
         foreach(Renderer rend in renderers){
             rend.material.SetFloat("_Smoothness", 0.7f);
@@ -32,6 +33,7 @@ public class BaseMachine : MonoBehaviour
             col = collision;
         }
     }
+
 
     private void OnTriggerExit(Collider collision) {
         col = null;
