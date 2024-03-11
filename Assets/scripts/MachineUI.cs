@@ -23,11 +23,11 @@ public class MachineUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private float targetY;
     public float hoverOffset = 50f;
 
-    private resourcessub resources;
+    private Resourcessub resources;
 
 
     void Start(){
-        resources = GameObject.Find("machinedata").GetComponent<resourcessub>();
+        resources = GameObject.Find("machinedata").GetComponent<Resourcessub>();
         player = GameObject.Find("BuildModeCam").GetComponent<BuildMode>();
         initY = form.position.y;
         GetComponentInChildren<Text>().text = mName;

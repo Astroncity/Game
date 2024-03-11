@@ -16,12 +16,12 @@ public class Drive : MonoBehaviour{
 
     private float accelerationIncrease = 0.5f;
     public bool inCar = false;
-    private wheel wheelScript;
+    private Wheel wheelScript;
 
 
     void Start(){
         rb.centerOfMass = new Vector3(0, -1f, 0);
-        wheelScript = frontLeftWheel.GetComponent<wheel>();
+        wheelScript = frontLeftWheel.GetComponent<Wheel>();
         carlength = transform.Find("body").GetComponent<Renderer>().bounds.size.z;
     }
 

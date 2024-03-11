@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class initBuildUI : MonoBehaviour{
+public class InitBuildUI : MonoBehaviour{
     public GameObject marker;
     public GameObject uiPrefab;
     public GameObject canvas;

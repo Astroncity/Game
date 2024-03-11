@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class playerHandler : MonoBehaviour{
+public class PlayerHandler : MonoBehaviour{
     float speed;
     public GameObject cam;
     public Rigidbody rb;

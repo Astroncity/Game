@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class itemScript : MonoBehaviour{
+public class ItemScript : MonoBehaviour{
     private bool canHold = false;
     public bool isHolding = false;
 
@@ -18,7 +18,7 @@ public class itemScript : MonoBehaviour{
     private Vector3 defaultScale;
     private Vector3 activeScale;   
 
-    public playerHandler player;
+    public PlayerHandler player;
 
     public static int count = 0;
 
@@ -27,7 +27,7 @@ public class itemScript : MonoBehaviour{
         count++;
         mainCamOBJ = GameObject.Find("Main Camera");
         mainCam = mainCamOBJ.GetComponent<Camera>();
-        player = GameObject.Find("Player").GetComponent<playerHandler>();
+        player = GameObject.Find("Player").GetComponent<PlayerHandler>();
         Crosshair = GameObject.Find("Crosshair").GetComponent<Image>();
         defaultColor = Crosshair.color;
         Debug.Log("DEFAULT: " + defaultColor);

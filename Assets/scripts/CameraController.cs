@@ -11,8 +11,8 @@ public class CameraController : MonoBehaviour{
     public float minAngle = -90f;
     public float maxAngle = 90f;
     public float Sens = 0.05f;
-    private float rotationX = 0;
-    private float rotationY = 0;
+    public float rotationX = 0;
+    public float rotationY = 0;
 
     public bool followingPlayer = true;
     public bool followingCar = false;
@@ -48,6 +48,13 @@ public class CameraController : MonoBehaviour{
         else if(rotationX < minAngle) {
             rotationX = Mathf.Lerp(rotationX, minAngle, 0.05f * Time.deltaTime * 70);
         }
+
+        if(rotationY > 360){
+            rotationY = 0;
+        }
+        else if(rotationY < 0){
+            rotationY = 360;
+        }
     }
 
     void followPlayer() {
@@ -56,6 +63,6 @@ public class CameraController : MonoBehaviour{
 
     void followCar(){
         transform.position = car.transform.position - car.transform.forward * 4 + car.transform.up * 6;
-        rotationY = Mathf.Lerp(rotationY, car.transform.eulerAngles.y, 0.025f);
+        rotationY = Mathf.LerpAngle(rotationY, car.transform.eulerAngles.y, 0.025f);
     }
 }

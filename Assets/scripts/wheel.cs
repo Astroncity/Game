@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class wheel : MonoBehaviour{
+public class Wheel : MonoBehaviour{
     // Start is called before the first frame update
     private Drive car;
     public float maxSteerAngle = 30;

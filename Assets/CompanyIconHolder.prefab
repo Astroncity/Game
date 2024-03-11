@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6654533294270959577
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7613292030635330732}
+  - component: {fileID: 4659589362280978717}
+  m_Layer: 0
+  m_Name: CompanyIconHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7613292030635330732
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6654533294270959577}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.0493666, y: 2.559444, z: 14.189668}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4659589362280978717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6654533294270959577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef2cc3716b5f4d84db97159d0477f5ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CompanyIcons:
+  - {fileID: 21300000, guid: 262c3b2a9021b5c4c886d36c8d921709, type: 3}
+  - {fileID: 21300000, guid: 8179e99cf6094e84d94412d9f14c00ec, type: 3}
+  - {fileID: 21300000, guid: 0f243913c7629c4429b40b17216a90eb, type: 3}
+  - {fileID: 21300000, guid: 1b19bda3257d6e145b938b2f85579e34, type: 3}
+  - {fileID: 21300000, guid: 89b6971d81ecfff43b7c73e40ca7e7c8, type: 3}
+  - {fileID: 21300000, guid: 1eb7d93dd984a1b48b0c4c14b2eda808, type: 3}
+  - {fileID: 21300000, guid: 19bf05db7db68a44685cf71520d673ac, type: 3}
+  - {fileID: 21300000, guid: 031a1d7bff6c45d4d97177aa8adc835e, type: 3}
+  - {fileID: 21300000, guid: 960bbea63415f4d4a941d4313cb17bfc, type: 3}
+  - {fileID: 21300000, guid: cb697566d462d2a46a3cce28c1a2eb9d, type: 3}
+  - {fileID: 21300000, guid: 6a95d867feecf1c49bf3c99192904879, type: 3}
+  - {fileID: 21300000, guid: 3226e7b2ca10d894badcc39700e0ef01, type: 3}
+  - {fileID: 21300000, guid: 6a3108598eafbac479277a4a34c20f33, type: 3}
+  - {fileID: 21300000, guid: fddbc85f87ca2e84eba545a7b23874f9, type: 3}
+  - {fileID: 21300000, guid: 8779a2cfc543f704bad4009339eddfc9, type: 3}
+  - {fileID: 21300000, guid: 4e3a55abf383be14bb4e00d3ccacbcea, type: 3}
+  - {fileID: 21300000, guid: a347fe6a433aca54f8669b75ab134d19, type: 3}
+  - {fileID: 21300000, guid: b6bd0dc574f0f1a40b8398c4c1ee6b22, type: 3}
+  - {fileID: 21300000, guid: 18382d5f7ad034a4fb71e26ccec6c42a, type: 3}
+  - {fileID: 21300000, guid: 9e93e8b9bc6c5e849bc892c49658a0f0, type: 3}
+  - {fileID: 21300000, guid: df93edf15a3236c409a4d8fa3e425bd4, type: 3}
+  - {fileID: 21300000, guid: 016b817b22f6dcf479376f44e015d841, type: 3}
+  - {fileID: 21300000, guid: ddb7533c411a711458ad288f66e7ab11, type: 3}
+  - {fileID: 21300000, guid: 811b8bb667c3f094890b3ea6deda7cc3, type: 3}
+  - {fileID: 21300000, guid: af1bba65d07d02e4ab6811021795bacb, type: 3}
+  - {fileID: 21300000, guid: b295b353fcd5c92428ad6a25ed4bef36, type: 3}
+  - {fileID: 21300000, guid: c2b9f96d4029a494d82c1f442631861f, type: 3}
+  - {fileID: 21300000, guid: 088a2b71066dbe347901f96e1194fe5b, type: 3}
+  - {fileID: 21300000, guid: 57d758b4d0dfbf048b638db78548c1a8, type: 3}
+  - {fileID: 21300000, guid: 9380e2662578ca8468eb017559e3595c, type: 3}
+  - {fileID: 21300000, guid: eb6869cfa779587469768454b5e7af8f, type: 3}
+  - {fileID: 21300000, guid: a1b19c1b66e14034c874c160707fbde5, type: 3}
+  - {fileID: 21300000, guid: efb57722a9cd9cc46ba5b053fc631c33, type: 3}
+  - {fileID: 21300000, guid: 2f5f0cce1d7aef64aa6dc798b24c3857, type: 3}
+  - {fileID: 21300000, guid: 4181c2e9f8130104ab45831d87acfca4, type: 3}
+  - {fileID: 21300000, guid: c3c24df7346191640be6c3af8d6b85e6, type: 3}
+  - {fileID: 21300000, guid: d5858d5a19fde2c4395fc7981793cbfa, type: 3}
+  - {fileID: 21300000, guid: c3f0af4eeed99d04fb6f0dd0be1524db, type: 3}
+  - {fileID: 21300000, guid: 63c2305399ea5df41aa58a286c8f6f81, type: 3}
+  - {fileID: 21300000, guid: df9867ca77e26964c980eebd154dcbf4, type: 3}
+  - {fileID: 21300000, guid: 57492d73a591ebe4690d3ec6e71a70bf, type: 3}
+  - {fileID: 21300000, guid: 66452e028f6fe5141977ce03ece8dc21, type: 3}
+  - {fileID: 21300000, guid: 01a5311a7e8d64447a4307f09208f896, type: 3}
+  - {fileID: 21300000, guid: 12d05220f6999c241b757478361506cb, type: 3}
+  - {fileID: 21300000, guid: 35b3e70dd837c20468fa0d5837546a8a, type: 3}
+  - {fileID: 21300000, guid: 3e71f92acfded5246bf460e4160f2216, type: 3}
+  - {fileID: 21300000, guid: 17d338beb6db4c249bf0438b83e7b88f, type: 3}
+  - {fileID: 21300000, guid: 3951a522eb0e1a84e994433e78e2ace1, type: 3}
+  - {fileID: 21300000, guid: a59e06563af0ae34faf3f330dc316f2d, type: 3}
+  - {fileID: 21300000, guid: 3cbc239a8f80aa14fbf35c3c9a72d637, type: 3}
+  CompanyNames:
+  - "Curds & Whey Company\r"
+  - "Savory Cheese Solutions\r"
+  - "Cheese Haven\r"
+  - "The Cheese Factory Outlet\r"
+  - "Cheese Kingdom\r"
+  - "Dairy Dreamworks\r"
+  - "Cheese Harmony\r"
+  - "The Cheese Cartel\r"
+  - "Heavenly Cheese Creations\r"
+  - "Curdle & Craft Co.\r"
+  - "Cheese Galore Enterprises\r"
+  - "Artisan Cheese Alchemy\r"
+  - "The Cheese Vault\r"
+  - "Dairy Delicacies\r"
+  - "The Cheese Chamber\r"
+  - "Dairy Delights\r"
+  - "CheeseCraft Co.\r"
+  - "Fromage Factory\r"
+  - "Curd Creations\r"
+  - "Artisanal CheeseWorks\r"
+  - "The Cheese Emporium\r"
+  - "Whey to Go Cheese\r"
+  - "Curd & Co.\r"
+  - "Gourmet Cheese Guild\r"
+  - "Cheesemaster Provisions\r"
+  - "Big Cheese Enterprises\r"
+  - "Heritage Dairy & Cheese\r"
+  - "The Cheese Cellar\r"
+  - Melted Moments Cheese Company

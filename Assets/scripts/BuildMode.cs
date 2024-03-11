@@ -42,7 +42,7 @@ public class BuildMode : MonoBehaviour{
     private BaseMachine baseMachine;
 
     public GameObject rotationPoint;
-    public rotator rotationScript;
+    public Rotator rotationScript;
 
     public Vector3 oldPos;
     public Quaternion oldRot;
@@ -56,7 +56,7 @@ public class BuildMode : MonoBehaviour{
         focused = true;
 
 
-        player.GetComponent<playerHandler>().canMove = false;
+        player.GetComponent<PlayerHandler>().canMove = false;
         buildCam = GetComponent<Camera>();
 
         plateY = marker.GetComponent<BaseMarker>().plate.transform.position.y;
@@ -106,7 +106,7 @@ public class BuildMode : MonoBehaviour{
         //Get rotator if there is one
         try{
             rotationPoint = liveSelected.transform.Find("rotationPoint").gameObject;
-            rotationScript = rotationPoint.GetComponent<rotator>();
+            rotationScript = rotationPoint.GetComponent<Rotator>();
         }
         catch{
             rotationScript = null;
@@ -151,8 +151,8 @@ public class BuildMode : MonoBehaviour{
             mainCam.SetActive(true);
             ui.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
-            player.GetComponent<playerHandler>().canMove = true;
-            player.GetComponent<playerHandler>().inBuildMode = false;
+            player.GetComponent<PlayerHandler>().canMove = true;
+            player.GetComponent<PlayerHandler>().inBuildMode = false;
 
             if(liveSelected != null){
                 Destroy(liveSelected);
