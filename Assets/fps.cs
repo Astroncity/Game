@@ -5,23 +5,45 @@ using UnityEngine.UI;
 
 public class fps : MonoBehaviour
 {
-    // Start is called before the first frame update
     public Text text;
+    public Text timeText;
+    private LightingManager lightingManager;
+    private float time;
     void Start()
     {
-        
+        lightingManager = GameObject.Find("Global Volume").GetComponent<LightingManager>();
+        time = lightingManager.TimeOfDay;   
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //update fps every other frame
+        time = lightingManager.TimeOfDay;
         if(Time.frameCount % 20 == 0){
             drawFps();
         }
+        ShowTime();
     }
+
 
     void drawFps(){
         text.text = "FPS: " + Mathf.RoundToInt((1 / Time.deltaTime)).ToString();
     }
+
+
+    void ShowTime(){
+        int hours = (int)time;
+        int minutes = (int)((time - hours) * 60);
+
+        int displayHours = hours % 12;
+        if (displayHours == 0) displayHours = 12; 
+
+        string minutesString = (minutes < 10) ? "0" + minutes.ToString() : minutes.ToString();
+        string ampm = (hours < 12) ? "AM" : "PM";
+        string timeString = displayHours.ToString() + ":" + minutesString + " " + ampm;
+
+        timeText.text = timeString; 
+    }
+
+
+    
 }
