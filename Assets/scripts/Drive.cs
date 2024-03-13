@@ -9,6 +9,9 @@ public class Drive : MonoBehaviour{
 
     public Rigidbody rb;
 
+    public uint Capacity;
+    public uint itemCount;
+
     public float motorForce = 5f;
     public float speedLimit = 100f;
     public float acceleration = 0f;
@@ -44,7 +47,7 @@ public class Drive : MonoBehaviour{
         rb.AddForce(transform.forward * motorForce * acceleration, ForceMode.Impulse);
 
         acceleration = Mathf.Clamp(acceleration, -1f, 1f);
-        acceleration *= 0.99f;
+        acceleration *= 0.955f;
 
         float turnRad = carlength / Mathf.Tan(wheelScript.rotationAmount * Mathf.Deg2Rad);
         float rotationAngle = rb.velocity.magnitude * Mathf.Rad2Deg / turnRad;
