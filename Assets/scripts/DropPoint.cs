@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class DropPoint : MonoBehaviour
 {
-    public uint itemCount;
+    public int itemCount;
     public bool active;
 
     public GameObject playerVehicle;
+    private GameObject player;
+
+    void Start(){
+        player = GameObject.Find("Player");
+    }
 
     public void OnTriggerEnter(Collider other){
         if(other.gameObject == playerVehicle && active){
@@ -24,9 +29,10 @@ public class DropPoint : MonoBehaviour
             active = false;
         }
         else{
-            itemCount -= playerVehicle.GetComponent<Drive>().Capacity - playerVehicle.GetComponent<Drive>().itemCount;
-            playerVehicle.GetComponent<Drive>().itemCount = playerVehicle.GetComponent<Drive>().Capacity;
+            itemCount -= (int)playerVehicle.GetComponent<Drive>().Capacity - playerVehicle.GetComponent<Drive>().itemCount;
+            playerVehicle.GetComponent<Drive>().itemCount = (int)playerVehicle.GetComponent<Drive>().Capacity;
         }
         GetComponent<MeshRenderer>().enabled = false;
+        player.GetComponent<PlayerHandler>().onMilkRun = false;
     }
 }

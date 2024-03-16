@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
 
 public class CompanyScript : MonoBehaviour{
@@ -11,6 +12,7 @@ public class CompanyScript : MonoBehaviour{
 
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI rateText;
+    public TextMeshProUGUI itemText;
 
     public Image icon;
     public Image background;
@@ -22,12 +24,14 @@ public class CompanyScript : MonoBehaviour{
 
     private Vector3 defaultScale;
     private GameObject player;
+    private PlayerHandler playerHandler;
 
     //! temporary
-    private uint itemCount = 50;
+    private int itemCount = 0;
 
     void Start(){
         player = GameObject.Find("Player");
+        playerHandler = player.GetComponent<PlayerHandler>();
         rate = (uint)Random.Range(1, 100);
         defaultScale = transform.localScale;
         defaultColor = background.color;
@@ -41,7 +45,9 @@ public class CompanyScript : MonoBehaviour{
     }
 
     void Update(){
+        if(playerHandler.inBuildMode) return;
         IsPointerOverUIObject();
+        itemText.text = itemCount + " L";
 
         if(isHovering){
             transform.localScale = Vector3.Lerp(transform.localScale, defaultScale * 1.1f, 10f * Time.deltaTime);
@@ -58,7 +64,7 @@ public class CompanyScript : MonoBehaviour{
                 point.GetComponent<DropPoint>().itemCount += itemCount;
                 point.GetComponent<DropPoint>().active = true;
                 point.GetComponent<MeshRenderer>().enabled = true;
-                player.GetComponent<PlayerHandler>().money -= rate * itemCount;
+                player.GetComponent<PlayerHandler>().money -= (int)rate * itemCount;
                 player.gameObject.GetComponent<PlayerHandler>().onMilkRun = true;
             }
             else{
@@ -66,6 +72,15 @@ public class CompanyScript : MonoBehaviour{
             }
         }   
     }
+
+    
+    public void addItem(int amount){
+        itemCount += amount;
+        if(itemCount < 0) itemCount = 0;
+    }
+
+
+
     void IsPointerOverUIObject(){        
         RaycastHit hitInfo;
         if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo)){

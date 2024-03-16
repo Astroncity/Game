@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerHandler : MonoBehaviour{
     float speed;
-    public uint money = 1000;
+    public int money = 1000;
     public bool onMilkRun = false;
     public GameObject cam;
     public Rigidbody rb;
