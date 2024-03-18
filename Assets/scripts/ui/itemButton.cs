@@ -23,7 +23,8 @@ public class itemButton : MonoBehaviour{
     }
 
     
-    void IsPointerOverUIObject(){        
+    void IsPointerOverUIObject(){     
+        if(Camera.main == null) return; //* temporary fix for player being in build mode
         RaycastHit hitInfo;
         if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo)){
             if(hitInfo.collider.gameObject.GetComponent<itemButton>() != null){

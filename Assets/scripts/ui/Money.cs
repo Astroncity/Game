@@ -4,11 +4,10 @@ using TMPro;
 using UnityEngine;
 
 public class Money : MonoBehaviour{
-    public PlayerHandler player;
     public TextMeshProUGUI text;        
 
 
     void Update(){
-        text.text = player.money.ToString() + "<color=yellow>g";
+        text.text = PlayerHandler.money.ToString() + "<color=yellow>g";
     }
 }

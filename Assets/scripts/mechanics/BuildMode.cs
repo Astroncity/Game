@@ -17,7 +17,6 @@ public class BuildMode : MonoBehaviour{
     public GameObject mainCam;
     public Camera buildCam;
 
-    public GameObject player;
     public GameObject marker;
     public GameObject ui;
 
@@ -56,7 +55,7 @@ public class BuildMode : MonoBehaviour{
         focused = true;
 
 
-        player.GetComponent<PlayerHandler>().canMove = false;
+        PlayerHandler.canMove = false;
         buildCam = GetComponent<Camera>();
 
         plateY = marker.GetComponent<BaseMarker>().plate.transform.position.y;
@@ -151,8 +150,8 @@ public class BuildMode : MonoBehaviour{
             mainCam.SetActive(true);
             ui.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
-            player.GetComponent<PlayerHandler>().canMove = true;
-            player.GetComponent<PlayerHandler>().inBuildMode = false;
+            PlayerHandler.canMove = true;
+            PlayerHandler.inBuildMode = false;
 
             if(liveSelected != null){
                 Destroy(liveSelected);
@@ -249,11 +248,9 @@ public class BuildMode : MonoBehaviour{
 
         baseMachine.arrow.SetActive(true);
 
-        // Instantiate object on left-click if not collided
         if(Input.GetMouseButtonDown(0) && !collided){
             Instantiate(selectedObejectPrefab, liveSelected.transform.position, liveSelected.transform.rotation);
         }
-        // Destroy object on right-click if collided
         if(Input.GetMouseButtonDown(1) && collided){
             GameObject obj = baseMachine.col.gameObject;
             Destroy(obj);
@@ -261,7 +258,6 @@ public class BuildMode : MonoBehaviour{
             baseMachine.colliding = false;
         }
 
-        // Rotate object on 'R' key press
         if(Input.GetKeyDown(KeyCode.R)){
             if(rotationPoint != null){
                 liveSelected.transform.RotateAround(rotationPoint.transform.position, Vector3.up, 90);

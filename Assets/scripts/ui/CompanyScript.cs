@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
+using System.Collections.Generic;
 
 
 public class CompanyScript : MonoBehaviour{
@@ -24,14 +25,15 @@ public class CompanyScript : MonoBehaviour{
 
     private Vector3 defaultScale;
     private GameObject player;
-    private PlayerHandler playerHandler;
+
+    public static CompanyScript selected = null;
+    public Confirmation confirmationScript;
 
     //! temporary
     private int itemCount = 0;
 
     void Start(){
         player = GameObject.Find("Player");
-        playerHandler = player.GetComponent<PlayerHandler>();
         rate = (uint)Random.Range(1, 100);
         defaultScale = transform.localScale;
         defaultColor = background.color;
@@ -45,7 +47,7 @@ public class CompanyScript : MonoBehaviour{
     }
 
     void Update(){
-        if(playerHandler.inBuildMode) return;
+        if(PlayerHandler.inBuildMode) return;
         IsPointerOverUIObject();
         itemText.text = itemCount + " L";
 
@@ -59,13 +61,10 @@ public class CompanyScript : MonoBehaviour{
         }
 
         if(Input.GetMouseButtonDown(0) && isHovering){
-            if(player.GetComponent<PlayerHandler>().money >= rate * itemCount && !player.gameObject.GetComponent<PlayerHandler>().onMilkRun){
-                GameObject point = getNearestDropPoint();
-                point.GetComponent<DropPoint>().itemCount += itemCount;
-                point.GetComponent<DropPoint>().active = true;
-                point.GetComponent<MeshRenderer>().enabled = true;
-                player.GetComponent<PlayerHandler>().money -= (int)rate * itemCount;
-                player.gameObject.GetComponent<PlayerHandler>().onMilkRun = true;
+            if( PlayerHandler.money >= rate * itemCount && !PlayerHandler.onMilkRun && itemCount > 0){
+                selected = this;
+                transform.parent.gameObject.SetActive(false);
+                confirmationScript.gameObject.SetActive(true);
             }
             else{
                 background.color = Color.red;
@@ -80,6 +79,18 @@ public class CompanyScript : MonoBehaviour{
     }
 
 
+    public void select(){
+        if(selected != this){
+            Debug.Log("Weird ass error");
+        }
+        GameObject point = getNearestDropPoint();
+        DropPoint pointS = point.GetComponent<DropPoint>(); 
+        pointS.init(false, false, itemCount);
+        point.GetComponent<MeshRenderer>().enabled = true;
+        PlayerHandler.money -= (int)rate * itemCount;
+        PlayerHandler.onMilkRun = true;
+        selected = null;
+    }
 
     void IsPointerOverUIObject(){        
         RaycastHit hitInfo;
@@ -95,7 +106,16 @@ public class CompanyScript : MonoBehaviour{
     }
 
     GameObject getNearestDropPoint(){
-        GameObject[] points = GameObject.FindGameObjectsWithTag("DropPoint");
+        List<GameObject> points = new List<GameObject>(GameObject.FindGameObjectsWithTag("DropPoint"));
+
+        //? filter out permanent points
+        for(int i = 0; i < points.Count; i++){
+            if(points[i].GetComponent<DropPoint>().permanent){
+                points.RemoveAt(i);
+                i--;
+            }
+        }
+        
         float closest = Vector3.Distance(points[0].transform.position, transform.position);
         GameObject closestPoint = points[0];
         foreach(GameObject point in points){

@@ -5,15 +5,17 @@ using UnityEngine.UI;
 
 public class PlayerHandler : MonoBehaviour{
     float speed;
-    public int money = 1000;
-    public bool onMilkRun = false;
+    public static int money = 1000;
+    public static bool onMilkRun = false;
     public GameObject cam;
     public Rigidbody rb;
 
     public GameObject buildCam;
-    public bool canMove = true;
+    public static bool canMove = true;
     private float sens;
-    public bool inBuildMode = false;
+    public static bool inBuildMode = false;
+    public static bool holdingItem = false;
+    public static bool canHoldItem = false;
 
     public GameObject testItem;
 
