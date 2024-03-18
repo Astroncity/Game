@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class BaseMachine : MonoBehaviour{
     public GameObject arrowP;
-    [HideInInspector]
     public GameObject arrow;
     
     public bool colliding = false;
     public Collider col = null;
 
+    public bool displayArrow;
+
 
     void Start()
     {
-        arrow = Instantiate(arrowP, transform, false);
-        arrow.transform.position = transform.position + new Vector3(0, 1, 0);
-        arrow.SetActive(false);
+        if(arrow){
+            arrow = Instantiate(arrowP, transform, false);
+            arrow.transform.position = transform.position + new Vector3(0, 1, 0);
+            arrow.SetActive(false);
+        }
 
         col = null;
         colliding = false;

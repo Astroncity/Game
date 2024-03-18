@@ -100,7 +100,7 @@ public class BuildMode : MonoBehaviour{
 
         //Get collider and arrow
         baseMachine = liveSelected.GetComponent<BaseMachine>();
-        baseMachine.arrow.SetActive(true);
+        if(baseMachine.displayArrow) baseMachine.arrow.SetActive(true);
 
         //Get rotator if there is one
         try{
@@ -246,7 +246,7 @@ public class BuildMode : MonoBehaviour{
             rend.material = collided ? holographicRed : holographicGreen;
         }
 
-        baseMachine.arrow.SetActive(true);
+        if(baseMachine.displayArrow) baseMachine.arrow.SetActive(true);
 
         if(Input.GetMouseButtonDown(0) && !collided){
             Instantiate(selectedObejectPrefab, liveSelected.transform.position, liveSelected.transform.rotation);

@@ -99,6 +99,11 @@ public class Drive : MonoBehaviour{
 
         float turnRad = carlength / Mathf.Tan(wheelScript.rotationAmount * Mathf.Deg2Rad);
         float rotationAngle = rb.velocity.magnitude * Mathf.Rad2Deg / turnRad;
+
+        if(acceleration < 0){
+            rotationAngle *= -1;
+        }
+
         transform.Rotate(Vector3.up, rotationAngle * Time.deltaTime);
 
         if(rb.velocity.magnitude > speedLimit){

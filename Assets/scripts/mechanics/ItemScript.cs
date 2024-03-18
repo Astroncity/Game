@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ItemScript : MonoBehaviour{
     public bool isHolding = false;
+    public static int count = 0;
 
     private GameObject mainCamOBJ;
     private Camera mainCam;
 
-
-    public static int count = 0;
+    public int value = 0;
+    public TextMeshProUGUI valueText;
+    public Canvas infoCanvas;
 
 
     void Start(){
@@ -21,18 +24,26 @@ public class ItemScript : MonoBehaviour{
 
 
     void Update(){
-        if(PlayerHandler.inBuildMode){
+        if(PlayerHandler.inBuildMode){  
             return;
         }
         if(mainCamOBJ == null){
             mainCamOBJ = Camera.main.gameObject;
+            mainCam = Camera.main;
             return;
         }
 
         checkMouseOn();
         hold();
-
+        handleUI();
     }
+
+
+    void handleUI(){
+        valueText.text = value.ToString() + "<color=yellow>g";
+        infoCanvas.transform.rotation = Quaternion.LookRotation(infoCanvas.transform.position - Camera.main.transform.position);
+    }
+
 
     void hold(){
         if (isHolding && Input.GetMouseButton(0)){
