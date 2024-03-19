@@ -6,6 +6,8 @@ public class Dropper : MonoBehaviour{
     public GameObject milkPrefab;
     public Transform dropMarker;
     public static int itemCount = 0;
+    
+    public bool active = true;
 
     void Start(){
         InvokeRepeating("dropItem", 0, 1);

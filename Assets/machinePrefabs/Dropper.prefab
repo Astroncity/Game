@@ -113,6 +113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   milkPrefab: {fileID: 441491311532774144, guid: bdfc35b68d32f274e915b42ba141c308, type: 3}
   dropMarker: {fileID: 1116303735530363250}
+  active: 1
 --- !u!1 &1116303735530363249
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,7 +173,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9176362271807430696}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -0.5}
+  m_LocalPosition: {x: 0, y: 1, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

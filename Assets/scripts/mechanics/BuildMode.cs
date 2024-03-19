@@ -111,6 +111,11 @@ public class BuildMode : MonoBehaviour{
             rotationScript = null;
             Debug.Log("No rotator");
         }
+
+        //! exception for Dropper
+        if(prefab.name == "Dropper"){
+            liveSelected.GetComponentInChildren<Dropper>().active = false;
+        }
         toggleMenu();
     }
 
@@ -128,6 +133,7 @@ public class BuildMode : MonoBehaviour{
 
         if(Math.Abs((transform.position - oldPos).magnitude) > epsilon && lerpForward){
             return;
+            
         }
         else{
             lerpForward = false;
