@@ -1,7 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
+
+
+public enum DropType{
+    delivery,
+    pickup,
+    sell
+}
+
 
 public class DropPoint : MonoBehaviour
 {
@@ -10,10 +19,13 @@ public class DropPoint : MonoBehaviour
 
     [Header("Options")]
     public bool permanent;
-    public bool delivery;
-    public bool pickup;
+    
+    public DropType type;
 
     public GameObject playerVehicle;
+
+    //if pickup
+    private int initPrice;
 
     void Start(){
         GetComponent<MeshRenderer>().enabled = permanent;
@@ -21,39 +33,57 @@ public class DropPoint : MonoBehaviour
 
     public void OnTriggerEnter(Collider other){
         if((other.gameObject == playerVehicle) && active){
-            if(pickup) fillVehicle();
-            if(delivery) unloadVehicle();
+            if(type == DropType.pickup) fillVehicle();
+            if(type == DropType.delivery) unloadVehicle();
+            if(type == DropType.sell) sell();
         }
     }
 
 
-    public void init(bool permanent, bool delivery, int itemCount){
+    public void init(bool permanent, DropType type, int itemCount, int initPrice){
         this.permanent = permanent;
-        this.delivery = delivery;
-        this.pickup = !this.delivery;
+        this.type = type;   
         this.itemCount = itemCount;
+        this.initPrice = initPrice;
         active = true;
     }
 
 
     void unloadVehicle(){
-        Dropper.itemCount += playerVehicle.GetComponent<Drive>().itemCount;
-        playerVehicle.GetComponent<Drive>().itemCount = 0;
+        Drive vehicle = playerVehicle.GetComponent<Drive>();
+        Dropper.itemCount += vehicle.itemCount;
+        vehicle.itemCount = 0;
     } 
+
+
+    void sell(){
+        Drive vehicle = playerVehicle.GetComponent<Drive>();
+        int sellPrice = 0;
+        foreach(ItemData item in vehicle.items){
+            sellPrice += item.value;
+        }
+        PlayerHandler.money += sellPrice;
+        vehicle.items.Clear();
+    }
 
 
     void fillVehicle(){
         //fill the vehicle with items up to its capacity
-        if(playerVehicle.GetComponent<Drive>().itemCount + itemCount <= playerVehicle.GetComponent<Drive>().Capacity){
-            playerVehicle.GetComponent<Drive>().itemCount += itemCount;
+        Drive vehicle = playerVehicle.GetComponent<Drive>();
+        if(vehicle.itemCount + itemCount <= vehicle.Capacity){
+            vehicle.itemCount += itemCount;
             itemCount = 0;
             active = false;
         }
         else{
-            itemCount -= (int)playerVehicle.GetComponent<Drive>().Capacity - playerVehicle.GetComponent<Drive>().itemCount;
-            playerVehicle.GetComponent<Drive>().itemCount = (int)playerVehicle.GetComponent<Drive>().Capacity;
+            itemCount -= (int)vehicle.Capacity - vehicle.itemCount;
+            vehicle.itemCount = (int)vehicle.Capacity;
         }
         GetComponent<MeshRenderer>().enabled = false;
         PlayerHandler.onMilkRun = false;
+
+        for(int i = 0; i < itemCount; i++){
+            vehicle.items.Add(new ItemData(initPrice, new List<Modifier>()));
+        }
     }
 }

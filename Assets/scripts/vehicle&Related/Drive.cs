@@ -29,14 +29,16 @@ public class Drive : MonoBehaviour{
     public GameObject itemPrefab;
     public TextMeshProUGUI itemText;
     public Canvas itemCanvas;
-    private GameObject[] items;
+    private GameObject[] displayItems;
     public uint unitSize = 2;
     
     public float tempOffset;
 
+    public List<ItemData> items;
+
 
     void Start(){
-        items = new GameObject[Capacity / unitSize];
+        displayItems = new GameObject[Capacity / unitSize];
         initItemDisplay();
         
         rb.centerOfMass = new Vector3(0, -1f, 0);
@@ -54,12 +56,12 @@ public class Drive : MonoBehaviour{
 
 
     void handleDisplayItems(){
-        for(int i = 0; i < items.Length; i++){
+        for(int i = 0; i < displayItems.Length; i++){
             if(i < itemCount / unitSize){
-                items[i].SetActive(true);
+                displayItems[i].SetActive(true);
             }
             else{
-                items[i].SetActive(false);
+                displayItems[i].SetActive(false);
             }
         }
         itemText.text = itemCount + "L" + "/" + Capacity + "L";
@@ -78,7 +80,7 @@ public class Drive : MonoBehaviour{
                 GameObject item = Instantiate(itemPrefab, startPosMarker.transform.position + new Vector3(xOffset * j, 0, zOffset * i), itemPrefab.transform.rotation);
                 item.transform.SetParent(this.transform);
                 item.SetActive(false);
-                items[i * cols + j] = item;
+                displayItems[i * cols + j] = item;
             }
         }
     }

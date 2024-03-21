@@ -15,7 +15,7 @@ public class Dropper : MonoBehaviour{
     
 
     void dropItem(){
-        if(itemCount > 0){
+        if(itemCount > 0 && active){
             GameObject milk = Instantiate(milkPrefab, dropMarker.position, milkPrefab.transform.rotation);
             itemCount--;
         }

@@ -6,15 +6,15 @@ using UnityEngine.UI;
 
 public class ItemScript : MonoBehaviour{
     public bool isHolding = false;
-    public static int count = 0;
+    public static int count = 0; //for UI display
 
     private GameObject mainCamOBJ;
     private Camera mainCam;
 
-    public int value = 0;
     public TextMeshProUGUI valueText;
     public Canvas infoCanvas;
 
+    public ItemData data;
 
     void Start(){
         count++;
@@ -40,7 +40,7 @@ public class ItemScript : MonoBehaviour{
 
 
     void handleUI(){
-        valueText.text = value.ToString() + "<color=yellow>g";
+        valueText.text = data.value.ToString() + "<color=yellow>g";
         infoCanvas.transform.rotation = Quaternion.LookRotation(infoCanvas.transform.position - Camera.main.transform.position);
     }
 
