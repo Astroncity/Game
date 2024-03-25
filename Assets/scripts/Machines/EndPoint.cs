@@ -7,7 +7,8 @@ public class EndPoint : MonoBehaviour{
     
     private void OnCollisionEnter(Collision collision){
         if(collision.gameObject.tag.Equals("Item")){
-            Storage.items.Add(collision.gameObject.GetComponent<ItemScript>().data);
+            Storage.items.Push(collision.gameObject.GetComponent<ItemScript>().data);
+            Destroy(collision.gameObject);
         }
     }
 }

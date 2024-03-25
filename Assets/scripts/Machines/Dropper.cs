@@ -6,6 +6,7 @@ public class Dropper : MonoBehaviour{
     public GameObject milkPrefab;
     public Transform dropMarker;
     public static int itemCount = 0;
+    public static int lastMilkPrice = 0;
     
     public bool active = true;
 
@@ -18,6 +19,7 @@ public class Dropper : MonoBehaviour{
         if(itemCount > 0 && active){
             GameObject milk = Instantiate(milkPrefab, dropMarker.position, milkPrefab.transform.rotation);
             itemCount--;
+            milk.GetComponent<ItemScript>().data.value = lastMilkPrice;
         }
     }
 }

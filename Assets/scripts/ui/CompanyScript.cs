@@ -86,6 +86,8 @@ public class CompanyScript : MonoBehaviour{
         GameObject point = getNearestDropPoint();
         DropPoint pointS = point.GetComponent<DropPoint>(); 
         pointS.init(false, DropType.pickup, itemCount, (int)rate);
+        Dropper.lastMilkPrice = (int)rate;
+        
         point.GetComponent<MeshRenderer>().enabled = true;
         PlayerHandler.money -= (int)rate * itemCount;
         PlayerHandler.onMilkRun = true;

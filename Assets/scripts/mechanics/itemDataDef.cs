@@ -13,10 +13,12 @@ public enum Modifier{
 public struct ItemData{
     public int value;
     public List<Modifier> modifiers;
+    public string type;
 
-    public ItemData(int value, List<Modifier> modifiers){
+    public ItemData(int value, string type, List<Modifier> modifiers){
         this.value = value;
         this.modifiers = modifiers;
+        this.type = type;
     }
 }
 

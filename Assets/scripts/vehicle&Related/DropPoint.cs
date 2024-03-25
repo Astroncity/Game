@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,7 +10,8 @@ using UnityEngine;
 public enum DropType{
     delivery,
     pickup,
-    sell
+    sell,
+    storagePickup
 }
 
 
@@ -36,6 +39,7 @@ public class DropPoint : MonoBehaviour
             if(type == DropType.pickup) fillVehicle();
             if(type == DropType.delivery) unloadVehicle();
             if(type == DropType.sell) sell();
+            if(type == DropType.storagePickup) storagePickup();
         }
     }
 
@@ -51,8 +55,13 @@ public class DropPoint : MonoBehaviour
 
     void unloadVehicle(){
         Drive vehicle = playerVehicle.GetComponent<Drive>();
-        Dropper.itemCount += vehicle.itemCount;
-        vehicle.itemCount = 0;
+        for(int i = 0; i < vehicle.items.Count; i++){
+            if(vehicle.items[i].type.Equals("milk")){
+                vehicle.items.RemoveAt(i);
+                i--;
+                Dropper.itemCount++;
+            }
+        }
     } 
 
 
@@ -68,22 +77,26 @@ public class DropPoint : MonoBehaviour
 
 
     void fillVehicle(){
-        //fill the vehicle with items up to its capacity
         Drive vehicle = playerVehicle.GetComponent<Drive>();
-        if(vehicle.itemCount + itemCount <= vehicle.Capacity){
-            vehicle.itemCount += itemCount;
-            itemCount = 0;
-            active = false;
+        int cap = vehicle.Capacity - vehicle.items.Count;
+        int itemsToAdd = Math.Min(cap, itemCount);
+        itemCount -= itemsToAdd;
+        for(int i = 0; i < itemsToAdd; i++){
+            vehicle.addItem(new ItemData(initPrice, "milk", new List<Modifier>()));
         }
-        else{
-            itemCount -= (int)vehicle.Capacity - vehicle.itemCount;
-            vehicle.itemCount = (int)vehicle.Capacity;
+        if(itemCount == 0){
+            active = false; 
+            GetComponent<MeshRenderer>().enabled = false;
         }
-        GetComponent<MeshRenderer>().enabled = false;
-        PlayerHandler.onMilkRun = false;
+    }
 
-        for(int i = 0; i < itemCount; i++){
-            vehicle.items.Add(new ItemData(initPrice, new List<Modifier>()));
+
+    void storagePickup(){
+        Debug.Log("Loading...");
+        Drive vehicle = playerVehicle.GetComponent<Drive>();
+        int num = Math.Min(vehicle.Capacity - vehicle.items.Count, Storage.items.Count);
+        for(int i = 0; i < num; i++){    
+            vehicle.addItem(Storage.items.Pop());
         }
     }
 }

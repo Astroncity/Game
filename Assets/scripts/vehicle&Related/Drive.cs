@@ -12,8 +12,7 @@ public class Drive : MonoBehaviour{
 
     public Rigidbody rb;
 
-    public uint Capacity;
-    public int itemCount;
+    public int Capacity;
 
     public float motorForce = 5f;
     public float speedLimit = 100f;
@@ -44,6 +43,7 @@ public class Drive : MonoBehaviour{
         rb.centerOfMass = new Vector3(0, -1f, 0);
         wheelScript = frontLeftWheel.GetComponent<Wheel>();
         carlength = transform.Find("body").GetComponent<Renderer>().bounds.size.z;
+        items = new List<ItemData>();
     }
 
 
@@ -57,14 +57,14 @@ public class Drive : MonoBehaviour{
 
     void handleDisplayItems(){
         for(int i = 0; i < displayItems.Length; i++){
-            if(i < itemCount / unitSize){
+            if(i < items.Count / unitSize){
                 displayItems[i].SetActive(true);
             }
             else{
                 displayItems[i].SetActive(false);
             }
         }
-        itemText.text = itemCount + "L" + "/" + Capacity + "L";
+        itemText.text = items.Count + "L" + "/" + Capacity + "L";
         itemCanvas.transform.rotation = Quaternion.LookRotation(itemCanvas.transform.position - mainCamera.transform.position);
     } 
 
@@ -128,5 +128,10 @@ public class Drive : MonoBehaviour{
         mainCamera.GetComponent<CameraController>().followingCar = false;
         inCar = false;
         player.transform.position = this.transform.position + new Vector3(2, 0, 0);
+    }
+
+    
+    public void addItem(ItemData item){
+        items.Add(item);
     }
 }
