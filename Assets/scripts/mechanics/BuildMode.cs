@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.Intrinsics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.UI;
@@ -39,6 +40,7 @@ public class BuildMode : MonoBehaviour{
     public bool focused = true;
 
     private BaseMachine baseMachine;
+    private MachineData machineData;
 
     public GameObject rotationPoint;
     public Rotator rotationScript;
@@ -49,6 +51,15 @@ public class BuildMode : MonoBehaviour{
     private bool lerpForward = true;
     private bool lerpBack = false;
 
+    public InitBuildUI buildUIData;
+    public static Dictionary<string, int> limits = new Dictionary<string, int>();
+
+
+    void Start(){
+        foreach(string name in buildUIData.machineNames){
+            limits.Add(name, 0);
+        }
+    }
 
     void OnEnable(){
         Cursor.lockState = CursorLockMode.Locked;
@@ -100,6 +111,8 @@ public class BuildMode : MonoBehaviour{
 
         //Get collider and arrow
         baseMachine = liveSelected.GetComponent<BaseMachine>();
+        machineData = liveSelected.GetComponent<MachineData>();
+
         if(baseMachine.displayArrow) baseMachine.arrow.SetActive(true);
 
         //Get rotator if there is one
@@ -246,22 +259,25 @@ public class BuildMode : MonoBehaviour{
         }
         liveSelected.transform.position = temp;
 
-        // Check collision
+        // Check collision and limits
         bool collided = baseMachine.colliding;
+        bool hitLimit = limits[machineData.mName] > machineData.buildLimit;
         foreach(Renderer rend in liveRends){
-            rend.material = collided ? holographicRed : holographicGreen;
+            rend.material = collided || hitLimit ? holographicRed : holographicGreen;
         }
 
         if(baseMachine.displayArrow) baseMachine.arrow.SetActive(true);
 
-        if(Input.GetMouseButtonDown(0) && !collided){
+        if(Input.GetMouseButtonDown(0) && !collided && !hitLimit){
             Instantiate(selectedObejectPrefab, liveSelected.transform.position, liveSelected.transform.rotation);
+            limits[machineData.mName] += 1;
         }
         if(Input.GetMouseButtonDown(1) && collided){
             GameObject obj = baseMachine.col.gameObject;
             Destroy(obj);
             baseMachine.col = null;
             baseMachine.colliding = false;
+            limits[machineData.mName] -= 1;
         }
 
         if(Input.GetKeyDown(KeyCode.R)){

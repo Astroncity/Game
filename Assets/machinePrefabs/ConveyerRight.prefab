@@ -454,6 +454,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   price: 250
   mName: ConveyerRight
+  buildLimit: 9999
 --- !u!114 &1583778184713262696
 MonoBehaviour:
   m_ObjectHideFlags: 0

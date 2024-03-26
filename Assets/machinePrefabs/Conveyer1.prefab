@@ -183,6 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   price: 69420
   mName: Conveyer1
+  buildLimit: 9999
 --- !u!54 &4708625765605971871
 Rigidbody:
   m_ObjectHideFlags: 0

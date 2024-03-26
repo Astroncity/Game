@@ -225,6 +225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   price: 50
   mName: Dropper
+  buildLimit: 4
 --- !u!54 &8613508886647754408
 Rigidbody:
   m_ObjectHideFlags: 0
