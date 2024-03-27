@@ -261,7 +261,7 @@ public class BuildMode : MonoBehaviour{
 
         // Check collision and limits
         bool collided = baseMachine.colliding;
-        bool hitLimit = limits[machineData.mName] > machineData.buildLimit;
+        bool hitLimit = limits[machineData.mName] > (machineData.buildLimit - 1); // -1 is needed for some reason
         foreach(Renderer rend in liveRends){
             rend.material = collided || hitLimit ? holographicRed : holographicGreen;
         }
