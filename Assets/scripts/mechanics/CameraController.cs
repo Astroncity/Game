@@ -22,7 +22,7 @@ public class CameraController : MonoBehaviour{
 
     void Start(){
         dist.x = transform.position.x - player.transform.position.x;
-        dist.y = transform.position.y - player.transform.position.y - 2.15f;
+        dist.y = transform.position.y - player.transform.position.y - 1.15f;
         dist.z = transform.position.z - player.transform.position.z;
     }
 
