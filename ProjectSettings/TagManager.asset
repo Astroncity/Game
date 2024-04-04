@@ -9,6 +9,7 @@ TagManager:
   - Item
   - Ground
   - DropPoint
+  - Upgrader
   layers:
   - Default
   - TransparentFX

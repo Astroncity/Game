@@ -31,7 +31,8 @@ public class BaseMachine : MonoBehaviour{
 
 
     private void OnTriggerEnter(Collider collision) {
-        if(!collision.gameObject.CompareTag("Ground") && collision.isTrigger){
+        string tag = collision.gameObject.tag;
+        if(tag.Equals(this.gameObject.tag) && collision.isTrigger){
             colliding = true;
             col = collision;
         }
@@ -39,8 +40,9 @@ public class BaseMachine : MonoBehaviour{
 
 
     private void OnTriggerExit(Collider collision) {
+        string tag = collision.gameObject.tag;
         col = null;
-        if(!collision.gameObject.CompareTag("Ground") && collision.isTrigger){
+        if(tag.Equals(this.gameObject.tag) && collision.isTrigger){
             colliding = false;
             col = null;
         }

@@ -15,15 +15,34 @@ public class ItemScript : MonoBehaviour{
     public Canvas infoCanvas;
 
     public ItemData data;
+    public int basePrice;
+
+    private static Dictionary<Modifier, double> modifierMultipliers = new Dictionary<Modifier, double>{
+        {Modifier.bronze, 1.1},
+        {Modifier.silver, 1.2},
+        {Modifier.gold, 1.3},
+        {Modifier.diamond, 1.4},
+    };
 
     void Start(){
+
+        basePrice = data.value;
         count++;
         mainCamOBJ = GameObject.Find("Main Camera");
         mainCam = Camera.main;
     }
 
 
+    public int calcPrice(){
+        double tempPrice = basePrice;
+        foreach(Modifier mod in data.modifiers){
+            tempPrice *= modifierMultipliers[mod];
+        }
+        return (int)tempPrice;
+    }
+
     void Update(){
+        data.value = calcPrice();
         if(PlayerHandler.inBuildMode){  
             return;
         }

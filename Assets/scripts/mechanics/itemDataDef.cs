@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public enum Modifier{
     diamond
 }
 
+[Serializable]
 public struct ItemData{
     public int value;
     public List<Modifier> modifiers;
