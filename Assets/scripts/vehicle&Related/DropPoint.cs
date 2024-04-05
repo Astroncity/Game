@@ -87,6 +87,7 @@ public class DropPoint : MonoBehaviour
         if(itemCount == 0){
             active = false; 
             GetComponent<MeshRenderer>().enabled = false;
+            PlayerHandler.onMilkRun = false;
         }
     }
 
