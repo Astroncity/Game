@@ -14,12 +14,13 @@ public class Upgrader : MonoBehaviour
     public ModifierChance[] modifierChanceValues;
     /* for now, possible values are bronze, silver, gold, diamond*/
 
-    private void OnTriggerEnter(Collider collision){
-        if(collision.gameObject.tag.Equals("item")){
-            float rand = UnityEngine.Random.Range(0, 100);
+    void OnTriggerEnter(Collider collision){
+        if(collision.gameObject.tag.Equals("Item")){
+            float rand = UnityEngine.Random.Range(0f, 100f);
             foreach(ModifierChance packet in modifierChanceValues){
                 if(rand < packet.chance){
-                    collision.gameObject.GetComponent<ItemData>().modifiers.Add(packet.mod);
+                    collision.gameObject.GetComponent<ItemScript>().data.modifiers.Add(packet.mod);
+                    Debug.Log("Added modifier: " + packet.mod.ToString());
                     return;
                 }
             }

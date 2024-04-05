@@ -126,9 +126,9 @@ public class BuildMode : MonoBehaviour{
         }
 
         //! exception for Dropper
-        //if(prefab.name == "Dropper"){
-         //   liveSelected.GetComponentInChildren<Dropper>().active = false;
-        //}
+        if(prefab.name == "Dropper"){
+            liveSelected.GetComponentInChildren<Dropper>().active = false;
+        }
         toggleMenu();
     }
 

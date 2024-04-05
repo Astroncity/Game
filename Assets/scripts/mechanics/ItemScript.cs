@@ -18,10 +18,10 @@ public class ItemScript : MonoBehaviour{
     public int basePrice;
 
     private static Dictionary<Modifier, double> modifierMultipliers = new Dictionary<Modifier, double>{
-        {Modifier.bronze, 1.1},
-        {Modifier.silver, 1.2},
-        {Modifier.gold, 1.3},
-        {Modifier.diamond, 1.4},
+        {Modifier.bronze, 1.6},
+        {Modifier.silver, 1.9},
+        {Modifier.gold, 2.3},
+        {Modifier.diamond, 3},
     };
 
     void Start(){
