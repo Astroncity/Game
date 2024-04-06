@@ -27,6 +27,7 @@ public class Dropper : MonoBehaviour{
             GameObject milk = Instantiate(milkPrefab, dropMarker.position, milkPrefab.transform.rotation);
             itemCount--;
             milk.GetComponent<ItemScript>().data.value = lastMilkPrice;
+            milk.GetComponent<ItemScript>().initOnSpawn();
         }
     }
 }

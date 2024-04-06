@@ -14,10 +14,10 @@ public enum Modifier{
 [Serializable]
 public struct ItemData{
     public int value;
-    public List<Modifier> modifiers;
+    public Dictionary<Modifier, int> modifiers;
     public string type;
 
-    public ItemData(int value, string type, List<Modifier> modifiers){
+    public ItemData(int value, string type, Dictionary<Modifier, int> modifiers){
         this.value = value;
         this.modifiers = modifiers;
         this.type = type;

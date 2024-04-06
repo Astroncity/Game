@@ -82,7 +82,7 @@ public class DropPoint : MonoBehaviour
         int itemsToAdd = Math.Min(cap, itemCount);
         itemCount -= itemsToAdd;
         for(int i = 0; i < itemsToAdd; i++){
-            vehicle.addItem(new ItemData(initPrice, "milk", new List<Modifier>()));
+            vehicle.addItem(new ItemData(initPrice, "milk", new Dictionary<Modifier, int>()));
         }
         if(itemCount == 0){
             active = false; 

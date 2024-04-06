@@ -16,11 +16,18 @@ public class Upgrader : MonoBehaviour
 
     void OnTriggerEnter(Collider collision){
         if(collision.gameObject.tag.Equals("Item")){
-            float rand = UnityEngine.Random.Range(0f, 100f);
-            foreach(ModifierChance packet in modifierChanceValues){
-                if(rand < packet.chance){
-                    collision.gameObject.GetComponent<ItemScript>().data.modifiers.Add(packet.mod);
-                    Debug.Log("Added modifier: " + packet.mod.ToString());
+            double totalProbability = 0;
+            foreach (ModifierChance item in modifierChanceValues){
+                totalProbability += item.chance;
+            }
+
+            System.Random random = new System.Random();
+            double randomNumber = random.NextDouble() * totalProbability;
+
+            foreach (ModifierChance item in modifierChanceValues){
+                randomNumber -= item.chance;
+                if (randomNumber <= 0){
+                    collision.gameObject.GetComponent<ItemScript>().addMod(item.mod);
                     return;
                 }
             }

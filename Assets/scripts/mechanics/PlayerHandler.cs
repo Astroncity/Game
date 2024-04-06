@@ -16,6 +16,7 @@ public class PlayerHandler : MonoBehaviour{
     public static bool inBuildMode = false;
     public static bool holdingItem = false;
     public static bool canHoldItem = false;
+    public static GameObject currentItem;
 
     public GameObject testItem;
 
@@ -29,6 +30,8 @@ public class PlayerHandler : MonoBehaviour{
     // Update is called once per frame
     void Update(){
         if(canMove) move();
+        if(!holdingItem) currentItem = checkMouseOnItem();
+        holdItem();
 
         // set player speed to 0 to avoid drifting (except gravity)
         rb.velocity = new Vector3(0, rb.velocity.y, 0);
@@ -64,5 +67,33 @@ public class PlayerHandler : MonoBehaviour{
         }
 
         transform.rotation = new Quaternion(0, cam.transform.rotation.y, 0, cam.transform.rotation.w);
+    }
+
+
+    void holdItem(){
+        if(currentItem == null) return;
+        if(Input.GetMouseButton(0) && (canHoldItem || holdingItem)){
+            holdingItem = true;
+            currentItem.GetComponent<ItemScript>().hold();
+        }
+        else{
+            holdingItem = false;
+        }
+    }
+
+
+    private GameObject checkMouseOnItem(){
+        if(Camera.main == null) return null;
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast(ray, out hit)){
+            if(hit.collider.gameObject.tag == "Item"){
+                canHoldItem = true;
+                return hit.collider.gameObject;
+            }
+        }
+        canHoldItem = false;
+        return null;
+
     }
 }
