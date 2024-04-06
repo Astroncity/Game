@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -12,7 +13,19 @@ public struct ModifierChance{
 public class Upgrader : MonoBehaviour
 {
     public ModifierChance[] modifierChanceValues;
+
+    public TextMeshProUGUI[] chanceTexts;
     /* for now, possible values are bronze, silver, gold, diamond*/
+
+    void Update(){
+        handleUI();
+    }
+
+    void handleUI(){
+        for (int i = 0; i < modifierChanceValues.Length; i++){
+            chanceTexts[i].text = modifierChanceValues[i].chance.ToString() + "%";
+        }
+    }
 
     void OnTriggerEnter(Collider collision){
         if(collision.gameObject.tag.Equals("Item")){
