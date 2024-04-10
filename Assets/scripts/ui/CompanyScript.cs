@@ -34,7 +34,7 @@ public class CompanyScript : MonoBehaviour{
 
     void Start(){
         player = GameObject.Find("Player");
-        rate = (uint)Random.Range(1, 100);
+        rate = (uint)Random.Range(10, 50);
         defaultScale = transform.localScale;
         defaultColor = background.color;
         hoverColor = defaultColor / 1.2f; hoverColor.a = 1;

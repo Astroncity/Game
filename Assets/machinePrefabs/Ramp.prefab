@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35d9443854c24f74ebd15dcf61069372, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  price: 250
+  price: 25
   mName: Ramp
   buildLimit: 9999
 --- !u!54 &851573783713970787

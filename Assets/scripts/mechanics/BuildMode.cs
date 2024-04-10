@@ -54,6 +54,8 @@ public class BuildMode : MonoBehaviour{
     public InitBuildUI buildUIData;
     public static Dictionary<string, int> limits = new Dictionary<string, int>();
 
+    public bool setRedTemp = false;
+
 
     void Start(){
         foreach(string name in buildUIData.machineNames){
@@ -219,6 +221,21 @@ public class BuildMode : MonoBehaviour{
     }
 
 
+    void setGreen(){
+        foreach(Renderer rend in liveRends){
+            rend.material = holographicGreen;
+        }
+        setRedTemp = false;
+    }
+
+
+    void setRed(){
+        foreach(Renderer rend in liveRends){
+            rend.material = holographicRed;
+        }
+    }
+
+
     public void displayHolo(){
         Vector3 mouse = Input.mousePosition;
         plateData dat = getDistanceFromPlate();
@@ -262,19 +279,30 @@ public class BuildMode : MonoBehaviour{
         // Check collision and limits
         bool collided = baseMachine.colliding;
         bool hitLimit = limits[machineData.mName] > (machineData.buildLimit - 1); // -1 is needed for some reason
-        foreach(Renderer rend in liveRends){
-            rend.material = collided || hitLimit ? holographicRed : holographicGreen;
+        if(!setRedTemp){
+            foreach(Renderer rend in liveRends){
+                rend.material = collided || hitLimit ? holographicRed : holographicGreen;
+            }
         }
 
         if(baseMachine.displayArrow) baseMachine.arrow.SetActive(true);
 
         if(Input.GetMouseButtonDown(0) && !collided && !hitLimit){
-            Instantiate(selectedObejectPrefab, liveSelected.transform.position, liveSelected.transform.rotation);
-            limits[machineData.mName] += 1;
+            if(PlayerHandler.money >= machineData.price){
+                Instantiate(selectedObejectPrefab, liveSelected.transform.position, liveSelected.transform.rotation);
+                limits[machineData.mName] += 1;
+                PlayerHandler.money -= machineData.price;
+            }
+            else{
+                setRed();
+                setRedTemp = true;
+                Invoke("setGreen", 0.25f);
+            }
         }
         if(Input.GetMouseButtonDown(1) && collided){
             GameObject obj = baseMachine.col.gameObject;
             Destroy(obj);
+            PlayerHandler.money += baseMachine.col.GetComponent<MachineData>().price;
             baseMachine.col = null;
             baseMachine.colliding = false;
             limits[machineData.mName] -= 1;
