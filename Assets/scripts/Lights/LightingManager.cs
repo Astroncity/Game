@@ -5,11 +5,12 @@ public class LightingManager : MonoBehaviour{
     [SerializeField] private Light DirectionalLight;
     [SerializeField] private LightingPreset Preset;
     [Range(0, 24)] public float TimeOfDay;
+    public float speedMult = 1;
 
 
     private void Update(){
         if (Application.isPlaying){
-            TimeOfDay += Time.deltaTime / 60f;
+            TimeOfDay += Time.deltaTime / 60f * speedMult;
             TimeOfDay %= 24; 
             UpdateLighting(TimeOfDay / 24f);
         }
