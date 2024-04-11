@@ -29,9 +29,19 @@ public class DropPoint : MonoBehaviour
 
     //if pickup
     private int initPrice;
+    public static GameObject currentPickupPoint = null;
 
     void Start(){
         GetComponent<MeshRenderer>().enabled = permanent;
+    }
+
+    void Update(){
+        if(active && !permanent && type == DropType.pickup){
+            currentPickupPoint = gameObject;
+        }
+        else if(currentPickupPoint == gameObject){
+            currentPickupPoint = null;
+        }
     }
 
     public void OnTriggerEnter(Collider other){

@@ -54,6 +54,8 @@ public class Drive : MonoBehaviour{
     float moveInput;
     float steerInput;
 
+    public GameObject arrow;
+
 
     void Start(){
         displayItems = new GameObject[Capacity / unitSize];
@@ -62,6 +64,7 @@ public class Drive : MonoBehaviour{
         Debug.Log(rb.centerOfMass);
         rb.centerOfMass -= new Vector3(0, 3f, 0);
         items = new List<ItemData>();
+        arrow.SetActive(false);
     }
 
 
@@ -74,6 +77,18 @@ public class Drive : MonoBehaviour{
         steerInput = Input.GetAxis("Horizontal");
 
         AnimateWheels();
+        handleArrow();
+    }
+
+    void handleArrow(){
+        if(PlayerHandler.onMilkRun && DropPoint.currentPickupPoint != null){
+            arrow.SetActive(true);
+            arrow.transform.LookAt(DropPoint.currentPickupPoint.transform);
+            arrow.transform.Rotate(0, -90, 0);
+        }
+        else{
+            arrow.SetActive(false);
+        }
     }
 
 
