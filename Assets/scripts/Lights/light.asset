@@ -15,11 +15,11 @@ MonoBehaviour:
   AmbientColor:
     serializedVersion: 2
     key0: {r: 0.23137255, g: 0.69411767, b: 1, a: 1}
-    key1: {r: 0.94845444, g: 1, b: 0.4198113, a: 1}
+    key1: {r: 1, g: 0.845817, b: 0.41960788, a: 1}
     key2: {r: 1, g: 1, b: 1, a: 0}
-    key3: {r: 0.9490197, g: 1, b: 0.41960788, a: 0}
+    key3: {r: 1, g: 0.854902, b: 0.454902, a: 0}
     key4: {r: 0.23137257, g: 0.69411767, b: 1, a: 0}
-    key5: {r: 0.2313726, g: 0.69411767, b: 1, a: 0}
+    key5: {r: 0.23137257, g: 0.69411767, b: 1, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 9830
@@ -27,7 +27,7 @@ MonoBehaviour:
     ctime2: 32768
     ctime3: 45875
     ctime4: 55049
-    ctime5: 60138
+    ctime5: 55049
     ctime6: 0
     ctime7: 0
     atime0: 0
