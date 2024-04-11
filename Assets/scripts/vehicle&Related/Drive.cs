@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -14,14 +15,8 @@ public class Drive : MonoBehaviour{
 
     public int Capacity;
 
-    public float motorForce = 5f;
-    public float speedLimit = 100f;
-    public float acceleration = 0f;
-    private float carlength;
 
-    private float accelerationIncrease = 0.5f;
     public bool inCar = false;
-    private Wheel wheelScript;
 
     [Header("Item Display")]
     public GameObject startPosMarker;
@@ -35,14 +30,37 @@ public class Drive : MonoBehaviour{
 
     public List<ItemData> items;
 
+    public enum Axel{
+        Front,
+        Rear
+    }
+
+    [Serializable]
+    public struct Wheel{
+        public GameObject wheelModel;
+        public WheelCollider wheelCollider;
+        public Axel axel;
+    }
+
+    public float maxAcceleration = 30.0f;
+    public float brakeAcceleration = 50.0f;
+
+    public float turnSensitivity = 1.0f;
+    public float maxSteerAngle = 30.0f;
+
+
+    public List<Wheel> wheels;
+
+    float moveInput;
+    float steerInput;
+
 
     void Start(){
         displayItems = new GameObject[Capacity / unitSize];
         initItemDisplay();
         
-        rb.centerOfMass = new Vector3(0, -1f, 0);
-        wheelScript = frontLeftWheel.GetComponent<Wheel>();
-        carlength = transform.Find("body").GetComponent<Renderer>().bounds.size.z;
+        Debug.Log(rb.centerOfMass);
+        rb.centerOfMass -= new Vector3(0, 3f, 0);
         items = new List<ItemData>();
     }
 
@@ -51,7 +69,11 @@ public class Drive : MonoBehaviour{
         handleDisplayItems();
         if(Input.GetKeyDown(KeyCode.E) && inCar) exit();
         else if(Input.GetKeyDown(KeyCode.E) && Vector3.Distance(player.transform.position, this.transform.position) < 10f) enter();
-        if(inCar) drive();
+        
+        moveInput = Input.GetAxis("Vertical");
+        steerInput = Input.GetAxis("Horizontal");
+
+        AnimateWheels();
     }
 
 
@@ -85,34 +107,6 @@ public class Drive : MonoBehaviour{
         }
     }
 
-    void drive(){
-        if(Input.GetKey(KeyCode.W)){
-            acceleration += accelerationIncrease * Time.deltaTime;
-        }
-        else if(Input.GetKey(KeyCode.S)){
-            acceleration -= accelerationIncrease * Time.deltaTime;
-        }
-        
-
-        rb.AddForce(transform.forward * motorForce * acceleration, ForceMode.Impulse);
-
-        acceleration = Mathf.Clamp(acceleration, -1f, 1f);
-        acceleration *= 0.955f;
-
-        float turnRad = carlength / Mathf.Tan(wheelScript.rotationAmount * Mathf.Deg2Rad);
-        float rotationAngle = rb.velocity.magnitude * Mathf.Rad2Deg / turnRad;
-
-        if(acceleration < 0){
-            rotationAngle *= -1;
-        }
-
-        transform.Rotate(Vector3.up, rotationAngle * Time.deltaTime);
-
-        if(rb.velocity.magnitude > speedLimit){
-            rb.velocity = rb.velocity.normalized * speedLimit;
-        }
-    }
-
 
     void enter(){
         mainCamera.GetComponent<CameraController>().followingPlayer = false;
@@ -133,5 +127,56 @@ public class Drive : MonoBehaviour{
     
     public void addItem(ItemData item){
         items.Add(item);
+    }
+
+
+    void FixedUpdate(){
+        if(inCar) drive();
+    }
+
+
+    void drive(){
+        Move();
+        Steer();
+        Brake();
+    }
+
+
+    void Move(){
+        foreach(var wheel in wheels){
+            wheel.wheelCollider.motorTorque = moveInput * 100 * maxAcceleration * Time.deltaTime;
+        }
+    }
+
+    void Steer(){
+        foreach(var wheel in wheels){
+            if(wheel.axel == Axel.Front){
+                var _steerAngle = steerInput * turnSensitivity * maxSteerAngle;
+                wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
+            }
+        }
+    }
+
+    void Brake(){
+        if(Input.GetKey(KeyCode.Space) || moveInput == 0){
+            foreach(var wheel in wheels){
+                wheel.wheelCollider.brakeTorque = 1200 * brakeAcceleration * Time.deltaTime;
+            }
+        }
+        else{
+            foreach(var wheel in wheels){
+                wheel.wheelCollider.brakeTorque = 0;
+            }
+        }
+    }
+
+    void AnimateWheels(){
+        foreach(var wheel in wheels){
+            Quaternion rot;
+            Vector3 pos;
+            wheel.wheelCollider.GetWorldPose(out pos, out rot);
+            wheel.wheelModel.transform.position = pos;
+            wheel.wheelModel.transform.rotation = rot;
+        }
     }
 }

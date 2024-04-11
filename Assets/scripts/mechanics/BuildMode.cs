@@ -57,6 +57,11 @@ public class BuildMode : MonoBehaviour{
     public bool setRedTemp = false;
 
 
+    public Material buildPlateNormal;
+    public Material buildPlateGrid;
+    public Renderer plateRend;
+
+
     void Start(){
         foreach(string name in buildUIData.machineNames){
             limits.Add(name, 0);
@@ -84,6 +89,8 @@ public class BuildMode : MonoBehaviour{
         rotationX = 55; //? rotation that is set in the editor
 
         lerpForward = true;
+        plateRend = marker.GetComponent<BaseMarker>().plate.GetComponent<Renderer>();
+
     }
 
 
@@ -140,10 +147,12 @@ public class BuildMode : MonoBehaviour{
         if(lerpForward){
             transform.position = Vector3.Lerp(transform.position, oldPos, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, oldRot, 0.05f);
+            plateRend.material = buildPlateGrid;
         }
         if(lerpBack){
             transform.position = Vector3.Lerp(transform.position, mainCam.transform.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, mainCam.transform.rotation, 0.05f);
+            plateRend.material = buildPlateNormal;
         }
 
         if(Math.Abs((transform.position - oldPos).magnitude) > epsilon && lerpForward){
