@@ -61,6 +61,8 @@ public class BuildMode : MonoBehaviour{
     public Material buildPlateGrid;
     public Renderer plateRend;
 
+    public bool placeCooldown;
+
 
     void Start(){
         foreach(string name in buildUIData.machineNames){
@@ -202,6 +204,10 @@ public class BuildMode : MonoBehaviour{
 
 
     public void toggleMenu(){
+        if(!focused){
+            placeCooldown = true;
+            Invoke("releasePlacementCooldown", 0.25f);
+        }
         focused = !focused;
         ui.SetActive(!focused);
         Cursor.lockState = focused ? CursorLockMode.Locked : CursorLockMode.None;
@@ -296,7 +302,7 @@ public class BuildMode : MonoBehaviour{
 
         if(baseMachine.displayArrow) baseMachine.arrow.SetActive(true);
 
-        if(Input.GetMouseButtonDown(0) && !collided && !hitLimit){
+        if(Input.GetMouseButton(0) && !collided && !hitLimit && !placeCooldown){
             if(PlayerHandler.money >= machineData.price){
                 Instantiate(selectedObejectPrefab, liveSelected.transform.position, liveSelected.transform.rotation);
                 limits[machineData.mName] += 1;
@@ -308,7 +314,7 @@ public class BuildMode : MonoBehaviour{
                 Invoke("setGreen", 0.25f);
             }
         }
-        if(Input.GetMouseButtonDown(1) && collided){
+        if(Input.GetMouseButton(1) && collided && !placeCooldown){
             GameObject obj = baseMachine.col.gameObject;
             Destroy(obj);
             PlayerHandler.money += baseMachine.col.GetComponent<MachineData>().price;
@@ -355,5 +361,10 @@ public class BuildMode : MonoBehaviour{
         else{
             return new plateData{data = hit.distance, hitPoint = hit.point};
         }
+    }
+
+
+    public void releasePlacementCooldown(){
+        placeCooldown = false;
     }
 }

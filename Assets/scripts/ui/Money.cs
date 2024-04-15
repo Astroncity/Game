@@ -8,6 +8,6 @@ public class Money : MonoBehaviour{
 
 
     void Update(){
-        text.text = PlayerHandler.money.ToString() + "<color=yellow>g";
+        text.text = PlayerHandler.money.ToString() + "<color=yellow><s>G</s>";
     }
 }

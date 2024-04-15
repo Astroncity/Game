@@ -146,7 +146,12 @@ public class Drive : MonoBehaviour{
 
 
     void FixedUpdate(){
-        if(inCar) drive();
+        if(!inCar){
+            moveInput = 0;
+            steerInput = 0;
+        }
+        
+        drive();
     }
 
 

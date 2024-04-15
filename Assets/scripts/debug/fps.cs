@@ -26,7 +26,7 @@ public class fps : MonoBehaviour
 
 
     void drawFps(){
-        text.text = "FPS: " + Mathf.RoundToInt((1 / Time.deltaTime)).ToString();
+        text.text = Mathf.RoundToInt((1 / Time.deltaTime)).ToString();
     }
 
 
