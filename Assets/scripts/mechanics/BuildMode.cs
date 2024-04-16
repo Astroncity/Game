@@ -307,6 +307,8 @@ public class BuildMode : MonoBehaviour{
                 Instantiate(selectedObejectPrefab, liveSelected.transform.position, liveSelected.transform.rotation);
                 limits[machineData.mName] += 1;
                 PlayerHandler.money -= machineData.price;
+                placeCooldown = true;
+                Invoke("releasePlacementCooldown", 0.1f);
             }
             else{
                 setRed();
