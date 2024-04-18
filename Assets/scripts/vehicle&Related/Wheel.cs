@@ -5,19 +5,14 @@ using UnityEngine;
 
 public class Wheel : MonoBehaviour{
     // Start is called before the first frame update
-    private Drive car;
     public float maxSteerAngle = 30;
     [HideInInspector]
     public float rotationAmount = 0;
 
 
-    void Start(){
-        car = transform.parent.gameObject.GetComponent<Drive>();
-    }
-
 
     void Update(){
-        if(car.inCar) handleRotation();
+        if(Drive.inCar) handleRotation();
     }
 
 

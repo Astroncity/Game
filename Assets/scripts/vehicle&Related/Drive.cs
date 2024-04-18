@@ -16,7 +16,7 @@ public class Drive : MonoBehaviour{
     public int Capacity;
 
 
-    public bool inCar = false;
+    public static bool inCar = false;
 
     [Header("Item Display")]
     public GameObject startPosMarker;
@@ -57,12 +57,13 @@ public class Drive : MonoBehaviour{
     public GameObject arrow;
 
 
+
     void Start(){
         displayItems = new GameObject[Capacity / unitSize];
         initItemDisplay();
         
         Debug.Log(rb.centerOfMass);
-        rb.centerOfMass -= new Vector3(0, 3f, 0);
+        rb.centerOfMass -= new Vector3(0, 1f, 0);
         items = new List<ItemData>();
         arrow.SetActive(false);
     }
@@ -180,7 +181,7 @@ public class Drive : MonoBehaviour{
     void Brake(){
         if(Input.GetKey(KeyCode.Space) || moveInput == 0){
             foreach(var wheel in wheels){
-                wheel.wheelCollider.brakeTorque = 1200 * brakeAcceleration * Time.deltaTime;
+                wheel.wheelCollider.brakeTorque = 1800 * brakeAcceleration * Time.deltaTime;
             }
         }
         else{
