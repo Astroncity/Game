@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MapCameraController : MonoBehaviour {
 
     public Transform player;
     public float baseSize;
-    
     private Camera thisCam;
 
     void Start(){
