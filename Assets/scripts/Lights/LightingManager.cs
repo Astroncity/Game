@@ -11,9 +11,11 @@ public class LightingManager : MonoBehaviour{
 
     private Material daySkyboxMaterial;
     private Material nightSkyboxMaterial;
+    private Material sunSetSkyboxMaterial;
 
     private SkyboxMaterial daylightMat;
     private SkyboxMaterial nightMat;
+    private SkyboxMaterial sunSetMat;
 
     
 
@@ -44,9 +46,11 @@ public class LightingManager : MonoBehaviour{
     public void Start(){
         daySkyboxMaterial = Instantiate(Preset.daySkybox);
         nightSkyboxMaterial = Instantiate(Preset.nightSkybox);
+        sunSetSkyboxMaterial = Instantiate(Preset.sunSetSkybox);
 
         daylightMat = skyMatFromShader(daySkyboxMaterial);
         nightMat = skyMatFromShader(nightSkyboxMaterial);
+        sunSetMat = skyMatFromShader(sunSetSkyboxMaterial);
     }
 
 
@@ -91,12 +95,13 @@ public class LightingManager : MonoBehaviour{
     public void setSkybox(){
         SkyboxMaterial currentMat = skyMatFromShader(RenderSettings.skybox);
 
-        if(TimeOfDay > 6 && TimeOfDay < 18){
-            currentMat = SkyboxMaterial.Lerp(currentMat, daylightMat, 0.01f / 2);
+        if(TimeOfDay > 5 && TimeOfDay < 18){
+            currentMat = SkyboxMaterial.Lerp(currentMat, daylightMat, 0.01f / 2 / 50);
             RenderSettings.skybox = ShaderFromSkyMat(currentMat);
         }
+
         else{
-            currentMat = SkyboxMaterial.Lerp(currentMat, nightMat, 0.01f / 2);
+            currentMat = SkyboxMaterial.Lerp(currentMat, nightMat, 0.01f / 2 / 50);
             RenderSettings.skybox = ShaderFromSkyMat(currentMat);
         }
 

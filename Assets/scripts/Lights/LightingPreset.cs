@@ -9,6 +9,7 @@ public class LightingPreset : ScriptableObject{
 
     public Material daySkybox;
     public Material nightSkybox;
+    public Material sunSetSkybox;
 
     
 }
