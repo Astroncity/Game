@@ -1,7 +1,8 @@
 using System.Globalization;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.LookDev;
 
-[ExecuteAlways]
 public class LightingManager : MonoBehaviour{
     [SerializeField] private Light DirectionalLight;
     [SerializeField] private LightingPreset Preset;
@@ -18,27 +19,67 @@ public class LightingManager : MonoBehaviour{
     private SkyboxMaterial sunSetMat;
 
     
-
-    public struct SkyGradient{
-        public Color top;
-        public Color bottom;
-        public double exponent;
+    public class SunDisc{
+        public Color color;
+        public float multiplier;
+        public float exponent;
     }
 
+    public class SunHalo{
+        public Color color;
+        public float exponent;
+        public float contribution;
+    }
+
+    public class HorizonLine : SunHalo{}
+
+    public class SkyGradient{
+        public Color top;
+        public Color bottom;
+        public float exponent;
+    }
+
+
+
+
+
+
     public struct SkyboxMaterial{
-        public Color sunDisc;
-        public Color sunHalo;
-        public Color HorizonLine;
+        public SunDisc sunDisc;
+        public SunHalo sunHalo;
+        public HorizonLine HorizonLine;
         public SkyGradient skyGradient;
 
         public static SkyboxMaterial Lerp(SkyboxMaterial a, SkyboxMaterial b, float t){
-            SkyboxMaterial result = new SkyboxMaterial();
-            result.sunDisc = Color.Lerp(a.sunDisc, b.sunDisc, t);
-            result.sunHalo = Color.Lerp(a.sunHalo, b.sunHalo, t);
-            result.HorizonLine = Color.Lerp(a.HorizonLine, b.HorizonLine, t);
+
+            if(a.IsUnityNull() || b.IsUnityNull()){
+                Debug.Log("SkyboxMaterial is null");
+                throw new System.NullReferenceException("balls");
+            }
+
+
+            SkyboxMaterial result = new SkyboxMaterial
+            {
+                sunDisc = new SunDisc(),
+                sunHalo = new SunHalo(),
+                HorizonLine = new HorizonLine(),
+                skyGradient = new SkyGradient()
+            };
+            result.sunDisc.color = Color.Lerp(a.sunDisc.color, b.sunDisc.color, t);
+            result.sunDisc.multiplier = Mathf.Lerp(a.sunDisc.multiplier, b.sunDisc.multiplier, t);
+            result.sunDisc.exponent = Mathf.Lerp(a.sunDisc.exponent, b.sunDisc.exponent, t);
+
+            result.sunHalo.color = Color.Lerp(a.sunHalo.color, b.sunHalo.color, t);
+            result.sunHalo.exponent = Mathf.Lerp(a.sunHalo.exponent, b.sunHalo.exponent, t);
+            result.sunHalo.contribution = Mathf.Lerp(a.sunHalo.contribution, b.sunHalo.contribution, t);
+
+            result.HorizonLine.color = Color.Lerp(a.HorizonLine.color, b.HorizonLine.color, t);
+            result.HorizonLine.exponent = Mathf.Lerp(a.HorizonLine.exponent, b.HorizonLine.exponent, t);
+            result.HorizonLine.contribution = Mathf.Lerp(a.HorizonLine.contribution, b.HorizonLine.contribution, t);
+
             result.skyGradient.top = Color.Lerp(a.skyGradient.top, b.skyGradient.top, t);
             result.skyGradient.bottom = Color.Lerp(a.skyGradient.bottom, b.skyGradient.bottom, t);
-            result.skyGradient.exponent = a.skyGradient.exponent * (1 - t) + b.skyGradient.exponent * t;
+            result.skyGradient.exponent = Mathf.Lerp(a.skyGradient.exponent, b.skyGradient.exponent, t);
             return result;
         }
     }
@@ -51,6 +92,7 @@ public class LightingManager : MonoBehaviour{
         daylightMat = skyMatFromShader(daySkyboxMaterial);
         nightMat = skyMatFromShader(nightSkyboxMaterial);
         sunSetMat = skyMatFromShader(sunSetSkyboxMaterial);
+        RenderSettings.skybox = daySkyboxMaterial;
     }
 
 
@@ -68,43 +110,112 @@ public class LightingManager : MonoBehaviour{
     }
 
 
+    public static SunDisc sunDiscFromShader(Material box){
+        SunDisc sunDisc = new SunDisc
+        {
+            color = box.GetColor("_SunDiscColor"),
+            multiplier = box.GetFloat("_SunDiscMultiplier"),
+            exponent = box.GetFloat("_SunDiscExponent")
+        };
+        return sunDisc;
+    }
+
+
+    public static SunHalo sunHaloFromShader(Material box){
+        SunHalo sunHalo = new SunHalo
+        {
+            color = box.GetColor("_SunHaloColor"),
+            exponent = box.GetFloat("_SunHaloExponent"),
+            contribution = box.GetFloat("_SunHaloContribution")
+        };
+        return sunHalo;
+    }
+
+    public static HorizonLine horizonLineFromShader(Material box){
+        HorizonLine horizonLine = new HorizonLine
+        {
+            color = box.GetColor("_HorizonLineColor"),
+            exponent = box.GetFloat("_HorizonLineExponent"),
+            contribution = box.GetFloat("_HorizonLineContribution")
+        };
+        return horizonLine;
+    }
+
+    public static SkyGradient skyGradientFromShader(Material box){
+        SkyGradient skyGradient = new SkyGradient
+        {
+            top = box.GetColor("_SkyGradientTop"),
+            bottom = box.GetColor("_SkyGradientBottom"),
+            exponent = box.GetFloat("_SkyGradientExponent")
+        };
+        return skyGradient;
+    }
+    
     public static SkyboxMaterial skyMatFromShader(Material box){
-        SkyboxMaterial skyMat = new SkyboxMaterial();
-        skyMat.sunDisc = box.GetColor("_SunDiscColor");
-        skyMat.sunHalo = box.GetColor("_SunHaloColor");
-        skyMat.HorizonLine = box.GetColor("_HorizonLineColor");
-        skyMat.skyGradient.top = box.GetColor("_SkyGradientTop");
-        skyMat.skyGradient.bottom = box.GetColor("_SkyGradientBottom");
-        skyMat.skyGradient.exponent = box.GetFloat("_SkyGradientExponent");
+        SkyboxMaterial skyMat = new SkyboxMaterial
+        {
+            sunDisc = sunDiscFromShader(box),
+            sunHalo = sunHaloFromShader(box),
+            HorizonLine = horizonLineFromShader(box),
+            skyGradient = skyGradientFromShader(box)
+        };
+
+
         return skyMat;
     }
 
 
     public Material ShaderFromSkyMat(SkyboxMaterial skyMat){
         Material box = daySkyboxMaterial;
-        box.SetColor("_SunDiscColor", skyMat.sunDisc);
-        box.SetColor("_SunHaloColor", skyMat.sunHalo);
-        box.SetColor("_HorizonLineColor", skyMat.HorizonLine);
+
+        box.SetColor("_SunDiscColor", skyMat.sunDisc.color);
+        box.SetFloat("_SunDiscMultiplier", skyMat.sunDisc.multiplier);
+        box.SetFloat("_SunDiscExponent", skyMat.sunDisc.exponent);
+
+        box.SetColor("_SunHaloColor", skyMat.sunHalo.color);
+        box.SetFloat("_SunHaloExponent", skyMat.sunHalo.exponent);
+        box.SetFloat("_SunHaloContribution", skyMat.sunHalo.contribution);
+
+        box.SetColor("_HorizonLineColor", skyMat.HorizonLine.color);
+        box.SetFloat("_HorizonLineExponent", skyMat.HorizonLine.exponent);
+        box.SetFloat("_HorizonLineContribution", skyMat.HorizonLine.contribution);
+
         box.SetColor("_SkyGradientTop", skyMat.skyGradient.top);
         box.SetColor("_SkyGradientBottom", skyMat.skyGradient.bottom);
-        box.SetFloat("_SkyGradientExponent", (float)skyMat.skyGradient.exponent);
+        box.SetFloat("_SkyGradientExponent", skyMat.skyGradient.exponent);
         return box;
     }
 
 
     public void setSkybox(){
-        SkyboxMaterial currentMat = skyMatFromShader(RenderSettings.skybox);
-
-        if(TimeOfDay > 5 && TimeOfDay < 18){
-            currentMat = SkyboxMaterial.Lerp(currentMat, daylightMat, 0.01f / 2 / 50);
-            RenderSettings.skybox = ShaderFromSkyMat(currentMat);
+        SkyboxMaterial currentMat;
+        float t;
+        float mult = 1f;
+        if(TimeOfDay >= 6 && TimeOfDay <= 8){ // Sunrise
+            t = (TimeOfDay - 6) / (8 - 6);
+            t *= mult;
+            currentMat = SkyboxMaterial.Lerp(nightMat, sunSetMat, t);
+        }
+        else if(TimeOfDay > 8 && TimeOfDay < 16){ // Day
+            t = (TimeOfDay - 8) / (16 - 8);
+            t *= mult;
+            currentMat = SkyboxMaterial.Lerp(sunSetMat, daylightMat, t);
+        }
+        else if(TimeOfDay >= 16 && TimeOfDay <= 18){ // Sunset
+            t = (TimeOfDay - 16) / (18 - 16);
+            t *= mult;
+            currentMat = SkyboxMaterial.Lerp(daylightMat, sunSetMat, t);
+        }
+        else{ // Night
+            if(TimeOfDay > 18)
+                t = (TimeOfDay - 18) / (24 - 18);
+            else
+                t = TimeOfDay / 6;
+            t *= mult;
+            currentMat = SkyboxMaterial.Lerp(sunSetMat, nightMat, t);
         }
 
-        else{
-            currentMat = SkyboxMaterial.Lerp(currentMat, nightMat, 0.01f / 2 / 50);
-            RenderSettings.skybox = ShaderFromSkyMat(currentMat);
-        }
-
+        RenderSettings.skybox = ShaderFromSkyMat(currentMat);
     }
 
 
