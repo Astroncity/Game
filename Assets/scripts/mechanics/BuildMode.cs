@@ -150,11 +150,13 @@ public class BuildMode : MonoBehaviour{
             transform.position = Vector3.Lerp(transform.position, oldPos, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, oldRot, 0.05f);
             plateRend.material = buildPlateGrid;
+           
         }
         if(lerpBack){
             transform.position = Vector3.Lerp(transform.position, mainCam.transform.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, mainCam.transform.rotation, 0.05f);
             plateRend.material = buildPlateNormal;
+            
         }
 
         if(Math.Abs((transform.position - oldPos).magnitude) > epsilon && lerpForward){
