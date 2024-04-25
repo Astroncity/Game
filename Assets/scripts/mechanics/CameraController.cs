@@ -62,7 +62,10 @@ public class CameraController : MonoBehaviour{
     }
 
     void followCar(){
+        float tmpY = transform.position.y;
         transform.position = car.transform.position - car.transform.forward * 4 + car.transform.up * 6;
+        tmpY = Mathf.Lerp(tmpY, car.transform.position.y + 5, Time.deltaTime);
+        transform.position = new Vector3(transform.position.x, tmpY, transform.position.z);
         rotationY = Mathf.LerpAngle(rotationY, car.transform.eulerAngles.y, 0.025f);
     }
 }

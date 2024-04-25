@@ -11,5 +11,7 @@ public class LightingPreset : ScriptableObject{
     public Material nightSkybox;
     public Material sunSetSkybox;
 
+    public float defFogDensity = 0.0025f;
+
     
 }

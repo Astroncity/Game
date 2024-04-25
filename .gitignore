@@ -11,7 +11,8 @@
 /[Uu]ser[Ss]ettings/
 
 Assets/Scenes/Game/LightingData.asset
-
+Assets/LightingData.asset
+"Assets/Scenes/Game 1/LightingData.asset"
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/

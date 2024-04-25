@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public struct ModifierChance{
@@ -15,6 +16,8 @@ public class Upgrader : MonoBehaviour
     public ModifierChance[] modifierChanceValues;
 
     public TextMeshProUGUI[] chanceTexts;
+    public int flatIncrease;
+    public TextMeshProUGUI flatIncreaseText;
     /* for now, possible values are bronze, silver, gold, diamond*/
 
     void Update(){
@@ -25,6 +28,7 @@ public class Upgrader : MonoBehaviour
         for (int i = 0; i < modifierChanceValues.Length; i++){
             chanceTexts[i].text = modifierChanceValues[i].chance.ToString() + "%";
         }
+        flatIncreaseText.text = "+" + flatIncrease.ToString() + "<color=yellow>g";
     }
 
     void OnTriggerEnter(Collider collision){
@@ -40,6 +44,7 @@ public class Upgrader : MonoBehaviour
             foreach (ModifierChance item in modifierChanceValues){
                 randomNumber -= item.chance;
                 if (randomNumber <= 0){
+                    collision.gameObject.GetComponent<ItemScript>().data.value += flatIncrease;
                     collision.gameObject.GetComponent<ItemScript>().addMod(item.mod);
                     return;
                 }

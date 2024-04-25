@@ -195,11 +195,13 @@ public class LightingManager : MonoBehaviour{
             t = (TimeOfDay - 6) / (8 - 6);
             t *= mult;
             currentMat = SkyboxMaterial.Lerp(nightMat, sunSetMat, t);
+            RenderSettings.fogDensity = Mathf.Lerp(RenderSettings.fogDensity, Preset.defFogDensity, t);
         }
         else if(TimeOfDay > 8 && TimeOfDay < 16){ // Day
             t = (TimeOfDay - 8) / (16 - 8);
             t *= mult;
             currentMat = SkyboxMaterial.Lerp(sunSetMat, daylightMat, t);
+            RenderSettings.fogDensity = Mathf.Lerp(RenderSettings.fogDensity, Preset.defFogDensity, t);
         }
         else if(TimeOfDay >= 16 && TimeOfDay <= 18){ // Sunset
             t = (TimeOfDay - 16) / (18 - 16);
@@ -213,6 +215,7 @@ public class LightingManager : MonoBehaviour{
                 t = TimeOfDay / 6;
             t *= mult;
             currentMat = SkyboxMaterial.Lerp(sunSetMat, nightMat, t);
+            RenderSettings.fogDensity = Mathf.Lerp(RenderSettings.fogDensity, 0.01f, t);
         }
 
         RenderSettings.skybox = ShaderFromSkyMat(currentMat);

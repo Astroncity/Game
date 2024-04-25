@@ -293,7 +293,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 2
+  m_BounceIntensity: 15.21
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -680,7 +680,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 2
+  m_BounceIntensity: 15.21
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -1392,7 +1392,6 @@ MonoBehaviour:
   frontLeftWheel: {fileID: 1697757476806397995}
   rb: {fileID: 9046584281896340903}
   Capacity: 24
-  inCar: 0
   startPosMarker: {fileID: 2537443753433082564}
   itemPrefab: {fileID: 5310931746973608750, guid: d0347b982b27d2241aa672a6a566d281, type: 3}
   itemText: {fileID: 2537443752687241644}
@@ -1418,7 +1417,6 @@ MonoBehaviour:
     wheelCollider: {fileID: 2537443753824455888}
     axel: 0
   arrow: {fileID: 6036809856510102634}
-  COMTracker: {fileID: 0}
 --- !u!65 &415216961177232399
 BoxCollider:
   m_ObjectHideFlags: 0
